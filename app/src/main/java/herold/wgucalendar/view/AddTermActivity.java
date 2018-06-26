@@ -2,14 +2,21 @@ package herold.wgucalendar.view;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,25 +25,40 @@ import java.util.Locale;
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.TermData;
 
-public class AddTermActivity extends Activity {
+public class AddTermActivity extends AppCompatActivity {
+    private DrawerLayout drawerLayout;
+    private Context context = this;
     private TermData datasource;
     private Calendar startDate = Calendar.getInstance();
     private Calendar endDate = Calendar.getInstance();
     private EditText txtTitle;
     private EditText txtStartDate;
     private EditText txtEndDate;
-    private Button btnSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_term);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Add Term");
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(context, drawerLayout));
+        ImageView imgMenu = findViewById(R.id.imgMenu);
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.START); }
+        });
 
         txtTitle = findViewById(R.id.txtTermTitle);
         txtStartDate =  findViewById(R.id.txtTermStartDate);
         txtEndDate =  findViewById(R.id.txtTermEndDate);
-        btnSave =  findViewById(R.id.btnTermSave);
+        Button btnSave = findViewById(R.id.btnTermSave);
         datasource = new TermData(this);
         datasource.open();
 
@@ -110,5 +132,17 @@ public class AddTermActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
     }
 }
