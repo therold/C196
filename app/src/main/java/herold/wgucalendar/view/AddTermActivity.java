@@ -1,9 +1,11 @@
 package herold.wgucalendar.view;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -16,7 +18,7 @@ import java.util.Locale;
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.TermData;
 
-public class AddTermActivity extends AppCompatActivity {
+public class AddTermActivity extends Activity {
     private TermData datasource;
     private Calendar startDate = Calendar.getInstance();
     private Calendar endDate = Calendar.getInstance();
@@ -29,6 +31,8 @@ public class AddTermActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_term);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         txtTitle = findViewById(R.id.txtTermTitle);
         txtStartDate =  findViewById(R.id.txtTermStartDate);
         txtEndDate =  findViewById(R.id.txtTermEndDate);
@@ -97,5 +101,14 @@ public class AddTermActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
