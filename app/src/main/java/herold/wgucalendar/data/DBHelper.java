@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE = "wgu.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_CREATE_TERM = "CREATE TABLE "
             + TermData.TABLE + "( "
@@ -25,7 +25,10 @@ public class DBHelper extends SQLiteOpenHelper {
             + CourseData.COLUMN_MENTOR_NAME + " TEXT NOT NULL, "
             + CourseData.COLUMN_MENTOR_PHONE + " TEXT NOT NULL, "
             + CourseData.COLUMN_MENTOR_EMAIL + " TEXT NOT NULL, "
-            + CourseData.COLUMN_NOTES  + " TEXT NOT NULL);";
+            + CourseData.COLUMN_NOTES  + " TEXT NOT NULL, "
+            + CourseData.COLUMN_TERM_ID + " INTEGER NOT NULL, "
+            + " FOREIGN KEY (" + CourseData.COLUMN_TERM_ID + ")  REFERENCES "
+                + TermData.TABLE + " (" + TermData.TABLE + "));";
 
     public DBHelper(Context context) { super(context, DATABASE, null, DATABASE_VERSION); }
 

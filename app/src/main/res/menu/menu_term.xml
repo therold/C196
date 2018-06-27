@@ -2,11 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <group android:checkableBehavior="none">
         <item
+            android:id="@+id/nav_add_course"
+            android:title="@string/add_course" />
+        <item
             android:id="@+id/nav_edit_term"
             android:title="@string/edit_term" />
         <item
             android:id="@+id/nav_delete_term"
             android:title="@string/delete_term" />
-
     </group>
 </menu>

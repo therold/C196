@@ -10,7 +10,7 @@ public class Course {
     private String mentorPhone;
     private String mentorEmail;
     private String notes;
-    // private List<String> assessments;
+    private long termId;
 
     public long getId() { return id; }
     public String getTitle() { return title; }
@@ -21,7 +21,7 @@ public class Course {
     public String getMentorPhone() { return mentorPhone; }
     public String getMentorEmail() { return mentorEmail; }
     public String getNotes() { return notes; }
-    // private List<String> getAssessments() { return assessments; }
+    public long getTermId() { return termId; }
 
     public void setId(long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
@@ -32,6 +32,22 @@ public class Course {
     public void setMentorPhone(String mentorPhone) { this.mentorPhone = mentorPhone; }
     public void setMentorEmail(String mentorEmail) { this.mentorEmail = mentorEmail; }
     public void setNotes(String notes) { this.notes = notes; }
-    // private void addAssessment(String string)
-    // private void deleteAssessment(String string)
+    public void setTermId(long termId) { this.termId = termId; }
+
+    public Course() {}
+
+    public Course(long id, String title, String startDate, String endDate, String status,
+            String mentorName, String mentorPhone, String mentorEmail, String notes,
+            long termId) {
+        this.id = id;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.mentorName = mentorName;
+        this.mentorPhone = mentorPhone;
+        this.mentorEmail = mentorEmail;
+        this.notes = notes;
+        this.termId = termId;
+    }
 }

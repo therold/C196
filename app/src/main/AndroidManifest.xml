@@ -17,22 +17,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.AllTermActivity">
+        <activity android:name=".view.AllTermActivity"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.MainActivity" />
         </activity>
-        <activity android:name=".view.AddTermActivity">
+        <activity android:name=".view.AddTermActivity"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:launchMode="singleTop"
                 android:value=".view.MainActivity" />
         </activity>
-        <activity android:name=".view.ViewTermActivity">
+        <activity android:name=".view.ViewTermActivity"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.AllTermActivity" />
         </activity>
+        <activity android:name=".view.AddCourseActivity"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.ViewTermActivity" />
+        </activity>
     </application>
-
 </manifest>

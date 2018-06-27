@@ -2,6 +2,7 @@ package herold.wgucalendar.view;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -63,6 +64,9 @@ public class ViewTermActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
+                    case R.id.nav_add_course:
+                        tryAddCourse();
+                        break;
                     case R.id.nav_edit_term:
                         tryEditTerm();
                         break;
@@ -95,6 +99,12 @@ public class ViewTermActivity extends AppCompatActivity {
         String myFormat = getResources().getString(R.string.date_format);
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         e.setText(sdf.format(c.getTime()));
+    }
+
+    private void tryAddCourse() {
+        Intent intent = new Intent(context, AddCourseActivity.class);
+        intent.putExtra("Term", term);
+        startActivityForResult(intent, 0);
     }
 
     private void tryDeleteTerm(Term term) {
