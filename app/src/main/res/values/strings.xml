@@ -4,4 +4,9 @@
     <string name="add_term">Add Term</string>
     <string name="all_term">View All Terms</string>
     <string name="all_course">View All Courses</string>
+    <string name="date_format">MM/dd/yy</string>
+    <string name="title">Title</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="save">Save</string>
 </resources>

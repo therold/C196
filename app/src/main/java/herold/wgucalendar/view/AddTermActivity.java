@@ -42,7 +42,7 @@ public class AddTermActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Add Term");
+        getSupportActionBar().setTitle(R.string.add_term);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
 
@@ -113,7 +113,7 @@ public class AddTermActivity extends AppCompatActivity {
     }
 
     private void updateLabel(EditText e, Calendar c) {
-        String myFormat = "MM/dd/yy";
+        String myFormat = getResources().getString(R.string.date_format);
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         e.setText(sdf.format(c.getTime()));
     }
