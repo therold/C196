@@ -59,4 +59,9 @@ public class Term implements Parcelable{
             return new Term(source);
         }
     };
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

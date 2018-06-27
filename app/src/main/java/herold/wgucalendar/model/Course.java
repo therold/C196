@@ -50,4 +50,9 @@ public class Course {
         this.notes = notes;
         this.termId = termId;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

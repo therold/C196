@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,7 +35,7 @@ public class AddCourseActivity extends AppCompatActivity {
     private EditText txtTitle;
     private EditText txtStartDate;
     private EditText txtEndDate;
-    private EditText txtStatus;
+    private Spinner cboStatus;
     private EditText txtMentorName;
     private EditText txtMentorPhone;
     private EditText txtMentorEmail;
@@ -64,7 +65,7 @@ public class AddCourseActivity extends AppCompatActivity {
         txtTitle = findViewById(R.id.txtTitle);
         txtStartDate = findViewById(R.id.txtStartDate);
         txtEndDate = findViewById(R.id.txtEndDate);
-        txtStatus = findViewById(R.id.txtStatus);
+        cboStatus = findViewById(R.id.cboStatus);
         txtMentorName = findViewById(R.id.txtMentorName);
         txtMentorPhone = findViewById(R.id.txtMentorPhone);
         txtMentorEmail = findViewById(R.id.txtMentorEmail);
@@ -117,7 +118,7 @@ public class AddCourseActivity extends AppCompatActivity {
                 String title = txtTitle.getText().toString();
                 String startDate = txtStartDate.getText().toString();
                 String endDate = txtEndDate.getText().toString();
-                String status = txtStatus.getText().toString();
+                String status = cboStatus.getSelectedItem().toString();
                 String mentorName = txtMentorName.getText().toString();
                 String mentorPhone = txtMentorPhone.getText().toString();
                 String mentorEmail = txtMentorEmail.getText().toString();
