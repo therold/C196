@@ -7,11 +7,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 
 import herold.wgucalendar.R;
+import herold.wgucalendar.model.Term;
 
 public class ViewHelper {
+    public static int DATA_SET_CHANGED = 10;
 
     public static void switchToActivity(Context context, Class c) {
         Intent intent = new Intent(context, c);
+        context.startActivity(intent);
+    }
+
+    public static void switchToActivity(Context context, Class c, int i) {
+        Intent intent = new Intent(context, c);
+        context.startActivity(intent);
+    }
+
+    public static void switchToActivity(Context context, Class c, Term term) {
+        Intent intent = new Intent(context, c);
+        intent.putExtra("Term", term);
         context.startActivity(intent);
     }
 

@@ -1,6 +1,7 @@
 package herold.wgucalendar.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -23,6 +25,8 @@ public class AllTermActivity extends AppCompatActivity {
     private Context context = this;
     private TermData datasource;
     private ListView lvTerms;
+    private List<Term> terms;
+    private TermAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,32 +51,28 @@ public class AllTermActivity extends AppCompatActivity {
         datasource = new TermData(this);
         datasource.open();
         lvTerms = findViewById(R.id.lvTerms);
-        List<Term> terms = datasource.all();
-        TermAdapter adapter = new TermAdapter(this, terms);
+        terms = datasource.all();
+        adapter = new TermAdapter(this, terms);
         lvTerms.setAdapter(adapter);
+        lvTerms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView lv, View v, int position, long id) {
+               Intent intent = new Intent(context, ViewTermActivity.class);
+               intent.putExtra("Term", (Term) lv.getItemAtPosition(position));
+               startActivityForResult(intent, 0);
+           }
+        });
     }
 
-
-//    public void onClick(View view) {
-////        ArrayAdapter<Term> adapter = (ArrayAdapter<Term>) getListAdapter();
-//        switch (view.getId()) {
-//            case R.id.btnAddTerm:
-//                Intent intent = new Intent(this, AddTermActivity.class);
-//                startActivity(intent);
-//                //Term term = datasource.createTerm("New Term", "s", "e");
-//                //adapter.add(term);
-//                break;
-//            case R.id.delete:
-////                if (getListAdapter().getCount() > 0) {
-//                    //term = (Term) getListAdapter().getItem(0);
-//                    //datasource.deleteTerm(term);
-//                    //adapter.remove(term);
-////                }
-//                break;
-//        }
-////        adapter.notifyDataSetChanged();
-//    }
-
+    @Override
+    protected  void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == ViewHelper.DATA_SET_CHANGED) {
+            datasource.open();
+            terms = datasource.all();
+            adapter.clear();
+            adapter.addAll(terms);
+        }
+    }
 
     @Override
     protected void onResume() {

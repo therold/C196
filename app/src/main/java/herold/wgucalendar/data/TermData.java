@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import herold.wgucalendar.data.DBHelper;
 import herold.wgucalendar.model.Term;
 
 public class TermData {
@@ -44,10 +43,17 @@ public class TermData {
         return newTerm;
     }
 
+    public void updateTerm(Term term) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TITLE, term.getTitle());
+        values.put(COLUMN_START_DATE, term.getStart());
+        values.put(COLUMN_END_DATE, term.getEnd());
+        database.update(TABLE, values, COLUMN_ID + " = " + term.getId(), null);
+    }
+
     public void deleteTerm(Term term) {
         long id = term.getId();
-        database.delete(TABLE, COLUMN_ID + " = " + id,
-                null);
+        database.delete(TABLE, COLUMN_ID + " = " + id,null);
     }
 
     public List<Term> all() {

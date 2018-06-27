@@ -25,9 +25,14 @@
         <activity android:name=".view.AddTermActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
+                android:launchMode="singleTop"
                 android:value=".view.MainActivity" />
         </activity>
-
+        <activity android:name=".view.ViewTermActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.AllTermActivity" />
+        </activity>
     </application>
 
 </manifest>
