@@ -1,7 +1,5 @@
 package herold.wgucalendar.model;
 
-import java.util.List;
-
 public class Course {
     private long id;
     private String title;
@@ -14,26 +12,26 @@ public class Course {
     private String notes;
     // private List<String> assessments;
 
-    private long getId() { return id; }
-    private String getTitle() { return title; }
-    private String getStart() { return startDate; }
-    private String getEnd() { return endDate; }
-    private String getStatus() { return status; }
-    private String getMentorName() { return mentorName; }
-    private String getMentorPhone() { return mentorPhone; }
-    private String getMentorEmail() { return mentorEmail; }
-    private String getNotes() { return notes; }
+    public long getId() { return id; }
+    public String getTitle() { return title; }
+    public String getStart() { return startDate; }
+    public String getEnd() { return endDate; }
+    public String getStatus() { return status; }
+    public String getMentorName() { return mentorName; }
+    public String getMentorPhone() { return mentorPhone; }
+    public String getMentorEmail() { return mentorEmail; }
+    public String getNotes() { return notes; }
     // private List<String> getAssessments() { return assessments; }
 
-    private void setId(long id) { this.id = id; }
-    private void setTitle(String title) { this.title = title; }
-    private void setStart(String startDate) { this.startDate = startDate; }
-    private void setEnd(String endDate) { this.endDate = endDate; }
-    private void setStatus(String status) { this.status = status; }
-    private void setMentorName(String mentorName) { this.mentorName = mentorName; }
-    private void setMentorPhone(String mentorPhone) { this.mentorPhone = mentorPhone; }
-    private void setMentorEmail(String mentorEmail) { this.mentorEmail = mentorEmail; }
-    private void setNotes(String notes) { this.notes = notes; }
+    public void setId(long id) { this.id = id; }
+    public void setTitle(String title) { this.title = title; }
+    public void setStart(String startDate) { this.startDate = startDate; }
+    public void setEnd(String endDate) { this.endDate = endDate; }
+    public void setStatus(String status) { this.status = status; }
+    public void setMentorName(String mentorName) { this.mentorName = mentorName; }
+    public void setMentorPhone(String mentorPhone) { this.mentorPhone = mentorPhone; }
+    public void setMentorEmail(String mentorEmail) { this.mentorEmail = mentorEmail; }
+    public void setNotes(String notes) { this.notes = notes; }
     // private void addAssessment(String string)
     // private void deleteAssessment(String string)
 }
