@@ -63,6 +63,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     private List<Assessment> assessments;
     private ImageView imgMenu;
     private List<View> inputs;
+    private Toolbar toolbar;
     private Course course;
     private CourseData courseData;
     private CourseAdapter adapter;
@@ -87,12 +88,13 @@ public class ViewCourseActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         imgMenu = findViewById(R.id.imgMenu);
         cntLayout = findViewById(R.id.cntLayout);
+        toolbar = findViewById(R.id.toolbar);
 
         course = getIntent().getParcelableExtra("Course");
         courseData = new CourseData(this);
         courseData.open();
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.view_course);
         ActionBar actionbar = getSupportActionBar();
@@ -133,7 +135,6 @@ public class ViewCourseActivity extends AppCompatActivity {
         inputs.add(txtMentorPhone);
         inputs.add(txtMentorEmail);
         inputs.add(txtNotes);
-
         for(View input : inputs) { input.setEnabled(false); }
 
         cboStatus.setSelection(getIndex(cboStatus, course.getStatus()));

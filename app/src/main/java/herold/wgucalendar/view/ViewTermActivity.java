@@ -20,8 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -33,41 +35,51 @@ import herold.wgucalendar.model.Course;
 import herold.wgucalendar.model.Term;
 
 public class ViewTermActivity extends AppCompatActivity {
-    private DrawerLayout drawerLayout;
+    private Calendar startDate;
+    private Calendar endDate;
     private Context context = this;
-    private String origTitle;
-    private String origStart;
-    private String origEnd;
-    private Calendar startDate = Calendar.getInstance();
-    private Calendar endDate = Calendar.getInstance();
+    private CourseAdapter adapter;
+    private CourseData courseData;
+    private DrawerLayout drawerLayout;
     private EditText txtTermTitle;
     private EditText txtStartDate;
     private EditText txtEndDate;
+    private ImageView imgMenu;
     private LinearLayout cntLayout;
     private LinearLayout buttonBar;
-    private ListView lvCourses;
     private List<Course> courses;
+    private List<View> inputs;
+    private ListView lvCourses;
+    private NavigationView navigationView;
+    private String oTitle;
+    private String oStart;
+    private String oEnd;
     private Term term;
     private TermData termData;
-    private CourseData courseData;
-    private CourseAdapter adapter;
+    private TextView lblCourses;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_term);
-        term = getIntent().getParcelableExtra("Term");
-        termData = new TermData(this);
-        termData.open();
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        txtTermTitle = findViewById(R.id.txtTermTitle);
+        txtStartDate = findViewById(R.id.txtTermStartDate);
+        txtEndDate = findViewById(R.id.txtTermEndDate);
+        lvCourses = findViewById(R.id.lvCourses);
+        imgMenu = findViewById(R.id.imgMenu);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        cntLayout = findViewById(R.id.cntLayout);
+        lblCourses = findViewById(R.id.lblCourses);
+        toolbar = findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.view_term);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener( new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -86,26 +98,28 @@ public class ViewTermActivity extends AppCompatActivity {
                 return true;
             }
         });
-        ImageView imgMenu = findViewById(R.id.imgMenu);
         imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.END);
-            }
+            public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.END); }
         });
 
-        txtTermTitle = findViewById(R.id.txtTermTitle);
-        txtTermTitle.setBackgroundResource(android.R.drawable.edit_text);
-        txtStartDate = findViewById(R.id.txtTermStartDate);
-        txtEndDate = findViewById(R.id.txtTermEndDate);
+        inputs = new ArrayList<>();
+        inputs.add(txtTermTitle);
+        inputs.add(txtStartDate);
+        inputs.add(txtEndDate);
+        for(View input : inputs) { input.setEnabled(false); }
+
+        termData = new TermData(this);
+        termData.open();
+        term = getIntent().getParcelableExtra("Term");
         txtTermTitle.setText(term.getTitle());
         txtStartDate.setText(term.getStart());
         txtEndDate.setText(term.getEnd());
-        cntLayout = findViewById(R.id.cntLayout);
+        startDate = Calendar.getInstance();
+        endDate = Calendar.getInstance();
 
         courseData = new CourseData(this);
         courseData.open();
-        lvCourses = findViewById(R.id.lvCourses);
         courses = courseData.findByTerm(term.getId());
         adapter = new CourseAdapter(this, courses);
         lvCourses.setAdapter(adapter);
@@ -143,13 +157,21 @@ public class ViewTermActivity extends AppCompatActivity {
     }
 
     private void tryEditTerm() {
-        origTitle = txtTermTitle.getText().toString();
-        origStart = txtStartDate.getText().toString();
-        origEnd = txtEndDate.getText().toString();
-        txtTermTitle.setFocusableInTouchMode(true);
-        txtTermTitle.setFocusable(true);
-        txtTermTitle.setClickable(true);
-        txtTermTitle.setBackgroundResource(android.R.drawable.edit_text);
+        oTitle = txtTermTitle.getText().toString();
+        oStart = txtStartDate.getText().toString();
+        oEnd = txtEndDate.getText().toString();
+        for(View input : inputs) { input.setEnabled(true); }
+        for(View input : inputs) { input.setFocusable(true); }
+        for(View input : inputs) { input.setFocusableInTouchMode(true); }
+        txtStartDate.setFocusableInTouchMode(false);
+        txtEndDate.setFocusableInTouchMode(false);
+        txtStartDate.setFocusable(false);
+        txtEndDate.setFocusable(false);
+        lblCourses.setVisibility(View.GONE);
+        lvCourses.setVisibility(View.GONE);
+        imgMenu.setEnabled(false);
+        imgMenu.setVisibility(View.GONE);
+
         DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -222,15 +244,21 @@ public class ViewTermActivity extends AppCompatActivity {
     }
 
     private void cancelUpdate() {
-        txtTermTitle.setText(origTitle);
-        txtStartDate.setText(origStart);
-        txtEndDate.setText(origEnd);
-        txtTermTitle.setFocusableInTouchMode(false);
-        txtTermTitle.setFocusable(false);
-        txtTermTitle.setClickable(false);
+        for(View input : inputs) { input.setEnabled(false); }
+        for(View input : inputs) { input.setFocusable(false); }
+        for(View input : inputs) { input.setFocusableInTouchMode(false); }
+        lblCourses.setVisibility(View.VISIBLE);
+        lvCourses.setVisibility(View.VISIBLE);
+        imgMenu.setEnabled(true);
+        imgMenu.setVisibility(View.VISIBLE);
         txtStartDate.setOnClickListener(null);
         txtEndDate.setOnClickListener(null);
         cntLayout.removeView(buttonBar);
+
+        txtTermTitle.setText(oTitle);
+        txtStartDate.setText(oStart);
+        txtEndDate.setText(oEnd);
+
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
 
