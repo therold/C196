@@ -11,18 +11,21 @@
     <string name="delete_course">Delete Course</string>
     <string name="all_course">View All Courses</string>
     <string name="view_course">View Course</string>
-    <string name="add_assessment">Add Course</string>
-    <string name="edit_assessment">Edit Course</string>
-    <string name="delete_assessment">Delete Course</string>
-    <string name="all_assessment">View All Courses</string>
-    <string name="view_assessment">View Course</string>
+    <string name="add_assessment">Add Assessment</string>
+    <string name="edit_assessment">Edit Assessment</string>
+    <string name="delete_assessment">Delete Assessment</string>
+    <string name="all_assessment">View All Assessments</string>
+    <string name="view_assessment">View Assessment</string>
     <string name="date_format">MM/dd/yy</string>
     <string name="title">Title</string>
     <string name="start">Start</string>
     <string name="end">End</string>
+    <string name="due_date">Due Date</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="type">Type</string>
     <string name="term">Term</string>
+    <string name="course">Course</string>
     <string name="status">Status</string>
     <string name="mentor_name">Mentor Name</string>
     <string name="mentor_phone">Mentor Phone</string>
@@ -40,5 +43,10 @@
         <item>In Progress</item>
         <item>Completed</item>
         <item>Dropped</item>
+    </string-array>
+
+    <string-array name="type_array">
+        <item>Objective</item>
+        <item>Performance</item>
     </string-array>
 </resources>

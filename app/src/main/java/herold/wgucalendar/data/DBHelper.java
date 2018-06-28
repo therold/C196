@@ -3,11 +3,10 @@ package herold.wgucalendar.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE = "wgu.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String DATABASE_CREATE_TERM = "CREATE TABLE "
             + TermData.TABLE + "( "
@@ -28,7 +27,16 @@ public class DBHelper extends SQLiteOpenHelper {
             + CourseData.COLUMN_NOTES  + " TEXT NOT NULL, "
             + CourseData.COLUMN_TERM_ID + " INTEGER NOT NULL, "
             + " FOREIGN KEY (" + CourseData.COLUMN_TERM_ID + ")  REFERENCES "
-                + TermData.TABLE + " (" + TermData.TABLE + "));";
+                + TermData.TABLE + " (" + TermData.COLUMN_ID + "));";
+    private static final String DATABASE_CREATE_ASSESSMENT = "CREATE TABLE "
+            + AssessmentData.TABLE + "( "
+            + AssessmentData.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + AssessmentData.COLUMN_TITLE + " TEXT NOT NULL, "
+            + AssessmentData.COLUMN_TYPE + " TEXT NOT NULL, "
+            + AssessmentData.COLUMN_DUE_DATE + " TEXT NOT NULL, "
+            + AssessmentData.COLUMN_COURSE_ID + " INTEGER NOT NULL, "
+            + " FOREIGN KEY (" + AssessmentData.COLUMN_COURSE_ID + ")  REFERENCES "
+            + CourseData.TABLE + " (" + CourseData.COLUMN_ID + "));";
 
     public DBHelper(Context context) { super(context, DATABASE, null, DATABASE_VERSION); }
 
@@ -36,15 +44,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(DATABASE_CREATE_TERM);
         database.execSQL(DATABASE_CREATE_COURSE);
+        database.execSQL(DATABASE_CREATE_ASSESSMENT);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.v(DBHelper.class.getName(),
-                "Upgrading database from version " + oldVersion + " to "
-                    + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TermData.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + CourseData.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + AssessmentData.TABLE);
         onCreate(db);
     }
 }

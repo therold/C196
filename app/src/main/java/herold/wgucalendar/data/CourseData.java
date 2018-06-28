@@ -54,9 +54,9 @@ public class CourseData {
                 COLUMN_ID + " = " + insertId, null,
                 null, null,null);
         cursor.moveToFirst();
-        Course newTerm = cursorToCourse(cursor);
+        Course newCourse = cursorToCourse(cursor);
         cursor.close();
-        return newTerm;
+        return newCourse;
     }
 
     public void updateCourse(Course course) {

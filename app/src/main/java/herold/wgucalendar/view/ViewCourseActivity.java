@@ -1,6 +1,7 @@
 package herold.wgucalendar.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -80,7 +81,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         imgMenu = findViewById(R.id.imgMenu);
         cntLayout = findViewById(R.id.cntLayout);
         toolbar = findViewById(R.id.toolbar);
-        ViewHelper.setupToolbar(this, toolbar, R.string.view_term);
+        ViewHelper.setupToolbar(this, toolbar, R.string.view_course);
 
         inputs = new ArrayList<>();
         inputs.add(cboStatus);
@@ -114,13 +115,13 @@ public class ViewCourseActivity extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.nav_add_assessment:
-                        tryAddAssessment();
+                        addAssessment();
                         break;
                     case R.id.nav_edit_course:
-                        tryEditCourse();
+                        editCourse();
                         break;
                     case R.id.nav_delete_course:
-                        tryDeleteCourse(course);
+                        deleteCourse(course);
                         break;
                 }
                 return true;
@@ -150,13 +151,13 @@ public class ViewCourseActivity extends AppCompatActivity {
 //        });
     }
 
-    private void tryAddAssessment() {
-//        Intent intent = new Intent(context, AddAssessmentActivity.class);
-//        intent.putExtra("Term", term);
-//        startActivityForResult(intent, 0);
+    private void addAssessment() {
+        Intent intent = new Intent(context, AddAssessmentActivity.class);
+        intent.putExtra("Course", course);
+        startActivity(intent);
     }
 
-    private void tryDeleteCourse(Course course) {
+    private void deleteCourse(Course course) {
         // TODO check if Course contains any Assessment
         if (false) {
             // has terms, show alert
@@ -167,7 +168,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         }
     }
 
-    private void tryEditCourse() {
+    private void editCourse() {
         oTerm = txtTerm.getText().toString();
         oTitle = txtTitle.getText().toString();
         oStart = txtStartDate.getText().toString();

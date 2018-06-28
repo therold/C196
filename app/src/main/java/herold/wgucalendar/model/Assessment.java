@@ -20,6 +20,7 @@ public class Assessment implements Parcelable {
     public void setTitle(String title) { this.title = title; }
     public void setType(String type) { this.type = type; }
     public void setDueDate(String dueDate) { this.dueDate = dueDate; }
+    public void setCourseId(long id) { this.courseId = courseId; }
 
     public Assessment() {}
 
