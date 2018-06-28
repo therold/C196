@@ -1,6 +1,5 @@
 package herold.wgucalendar.view;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,7 +18,6 @@ import herold.wgucalendar.model.Term;
 
 public class AddCourseActivity extends AppCompatActivity {
     private Button btnSave;
-    private Context context;
     private CourseData courseData;
     private DrawerLayout drawerLayout;
     private EditText txtTerm;
@@ -57,19 +55,19 @@ public class AddCourseActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
 
         ViewHelper.setupToolbar(this, toolbar, R.string.add_course);
+        ViewHelper.setupDateInput(this, txtStartDate);
+        ViewHelper.setupDateInput(this, txtEndDate);
         courseData = new CourseData(this);
         courseData.open();
         term = getIntent().getParcelableExtra("Term");
         txtTerm.setText(term.getTitle());
-        context = this;
 
-        navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(context, drawerLayout));
+        navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(this, drawerLayout));
         imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.START); }
         });
-        ViewHelper.setupDateInput(this, txtStartDate);
-        ViewHelper.setupDateInput(this, txtEndDate);
+
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
