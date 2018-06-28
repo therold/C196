@@ -1,32 +1,25 @@
 package herold.wgucalendar.view;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.CourseData;
@@ -35,8 +28,6 @@ import herold.wgucalendar.model.Course;
 import herold.wgucalendar.model.Term;
 
 public class ViewTermActivity extends AppCompatActivity {
-    private Calendar startDate;
-    private Calendar endDate;
     private Context context = this;
     private CourseAdapter adapter;
     private CourseData courseData;
@@ -74,13 +65,36 @@ public class ViewTermActivity extends AppCompatActivity {
         cntLayout = findViewById(R.id.cntLayout);
         lblCourses = findViewById(R.id.lblCourses);
         toolbar = findViewById(R.id.toolbar);
+        ViewHelper.setUpToolbar(this, toolbar, R.string.view_term);
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.view_term);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        inputs = new ArrayList<>();
+        inputs.add(txtTermTitle);
+        inputs.add(txtStartDate);
+        inputs.add(txtEndDate);
+        for(View input : inputs) { input.setEnabled(false); }
 
-        navigationView.setNavigationItemSelectedListener( new NavigationView.OnNavigationItemSelectedListener() {
+        termData = new TermData(this);
+        termData.open();
+        term = getIntent().getParcelableExtra("Term");
+        txtTermTitle.setText(term.getTitle());
+        txtStartDate.setText(term.getStart());
+        txtEndDate.setText(term.getEnd());
+
+        courseData = new CourseData(this);
+        courseData.open();
+        courses = courseData.findByTerm(term.getId());
+        adapter = new CourseAdapter(this, courses);
+        lvCourses.setAdapter(adapter);
+        AdapterView.OnItemClickListener lvListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView lv, View v, int position, long id) {
+                Intent intent = new Intent(context, ViewCourseActivity.class);
+                intent.putExtra("Course", (Course) lv.getItemAtPosition(position));
+                startActivityForResult(intent, 0);
+            }
+        };
+        lvCourses.setOnItemClickListener(lvListener);
+        NavigationView.OnNavigationItemSelectedListener navListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 drawerLayout.closeDrawers();
@@ -97,46 +111,13 @@ public class ViewTermActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
-        imgMenu.setOnClickListener(new View.OnClickListener() {
+        };
+        navigationView.setNavigationItemSelectedListener(navListener);
+        View.OnClickListener imgMenuListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.END); }
-        });
-
-        inputs = new ArrayList<>();
-        inputs.add(txtTermTitle);
-        inputs.add(txtStartDate);
-        inputs.add(txtEndDate);
-        for(View input : inputs) { input.setEnabled(false); }
-
-        termData = new TermData(this);
-        termData.open();
-        term = getIntent().getParcelableExtra("Term");
-        txtTermTitle.setText(term.getTitle());
-        txtStartDate.setText(term.getStart());
-        txtEndDate.setText(term.getEnd());
-        startDate = Calendar.getInstance();
-        endDate = Calendar.getInstance();
-
-        courseData = new CourseData(this);
-        courseData.open();
-        courses = courseData.findByTerm(term.getId());
-        adapter = new CourseAdapter(this, courses);
-        lvCourses.setAdapter(adapter);
-        lvCourses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView lv, View v, int position, long id) {
-                Intent intent = new Intent(context, ViewCourseActivity.class);
-                intent.putExtra("Course", (Course) lv.getItemAtPosition(position));
-                startActivityForResult(intent, 0);
-            }
-        });
-    }
-
-    private void updateLabel(EditText e, Calendar c) {
-        String myFormat = getResources().getString(R.string.date_format);
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        e.setText(sdf.format(c.getTime()));
+        };
+        imgMenu.setOnClickListener(imgMenuListener);
     }
 
     private void tryAddCourse() {
@@ -171,66 +152,25 @@ public class ViewTermActivity extends AppCompatActivity {
         lvCourses.setVisibility(View.GONE);
         imgMenu.setEnabled(false);
         imgMenu.setVisibility(View.GONE);
+        ViewHelper.setupDateInput(this, txtStartDate);
+        ViewHelper.setupDateInput(this, txtEndDate);
 
-        DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                startDate.set(Calendar.YEAR, year);
-                startDate.set(Calendar.MONTH, monthOfYear);
-                startDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(txtStartDate, startDate);
-            }
-        };
-        DatePickerDialog.OnDateSetListener endDateListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                endDate.set(Calendar.YEAR, year);
-                endDate.set(Calendar.MONTH, monthOfYear);
-                endDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(txtEndDate, endDate);
-            }
-        };
-
-        final DatePickerDialog startDatePickerDialog = new DatePickerDialog(
-                this, startDateListener, startDate.get(Calendar.YEAR),
-                startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH));
-
-        final DatePickerDialog endDatePickerDialog = new DatePickerDialog(
-                this, endDateListener,  endDate.get(Calendar.YEAR),
-                endDate.get(Calendar.MONTH), endDate.get(Calendar.DAY_OF_MONTH));
-
-
-        txtStartDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { startDatePickerDialog.show(); }
-        });
-        txtEndDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { endDatePickerDialog.show(); }
-        });
         buttonBar = new LinearLayout(context);
         Button btnSave = new Button(context);
         btnSave.setText(R.string.save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                saveUpdate();
-            }
+            public void onClick(View view) { saveUpdate(); }
         });
         Button btnCancel = new Button(context);
         btnCancel.setText(R.string.cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
            @Override
-           public void onClick(View view) {
-               cancelUpdate();
-           }
+           public void onClick(View view) { cancelUpdate(); }
         });
         buttonBar.setOrientation(LinearLayout.HORIZONTAL);
         buttonBar.addView(btnSave);
         buttonBar.addView(btnCancel);
-
         cntLayout.addView(buttonBar);
     }
 
@@ -259,10 +199,30 @@ public class ViewTermActivity extends AppCompatActivity {
         txtStartDate.setText(oStart);
         txtEndDate.setText(oEnd);
 
-        InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
+        ViewHelper.closeKeyboard(this);
+    }
 
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+    @Override
+    protected  void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == ViewHelper.DATA_SET_CHANGED) {
+            courseData.open();
+            courses = courseData.findByTerm(term.getId());
+            adapter.clear();
+            adapter.addAll(courses);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        courseData.open();
+        termData.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        courseData.close();
+        termData.close();
+        super.onPause();
     }
 }
