@@ -13,18 +13,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import herold.wgucalendar.R;
+import herold.wgucalendar.data.CourseData;
 import herold.wgucalendar.data.TermData;
+import herold.wgucalendar.model.Course;
 import herold.wgucalendar.model.Term;
 
 public class ViewTermActivity extends AppCompatActivity {
@@ -40,8 +45,12 @@ public class ViewTermActivity extends AppCompatActivity {
     private EditText txtEndDate;
     private LinearLayout cntLayout;
     private LinearLayout buttonBar;
+    private ListView lvCourses;
+    private List<Course> courses;
     private Term term;
     private TermData datasource;
+    private CourseData courseData;
+    private CourseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +102,21 @@ public class ViewTermActivity extends AppCompatActivity {
         txtStartDate.setText(term.getStart());
         txtEndDate.setText(term.getEnd());
         cntLayout = findViewById(R.id.cntLayout);
+
+        courseData = new CourseData(this);
+        courseData.open();
+        lvCourses = findViewById(R.id.lvCourses);
+        courses = courseData.findByTerm(term.getId());
+        adapter = new CourseAdapter(this, courses);
+        lvCourses.setAdapter(adapter);
+        lvCourses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView lv, View v, int position, long id) {
+//                Intent intent = new Intent(context, ViewCourseActivity.class);
+//                intent.putExtra("Course", (Course) lv.getItemAtPosition(position));
+//                startActivityForResult(intent, 0);
+            }
+        });
     }
 
     private void updateLabel(EditText e, Calendar c) {

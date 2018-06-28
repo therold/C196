@@ -23,6 +23,7 @@
     <string name="mentor_phone">Mentor Phone</string>
     <string name="mentor_email">Mentor Email</string>
     <string name="notes">Notes</string>
+    <string name="courses">Courses:</string>
 
     <string-array name="status_array">
         <item>Plan to Take</item>

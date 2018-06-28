@@ -92,6 +92,20 @@ public class CourseData {
         return courses;
     }
 
+    public List<Course> findByTerm(long termId) {
+        List<Course> courses = new ArrayList<>();
+        Cursor cursor = database.query(TABLE, allColumns,
+                COLUMN_TERM_ID + " = " + termId, null, null, null, null);
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()) {
+            Course course = cursorToCourse(cursor);
+            courses.add(course);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return courses;
+    }
+
     private Course cursorToCourse(Cursor cursor) {
         Course course = new Course();
         course.setId(cursor.getLong(0));
