@@ -3,7 +3,7 @@ package herold.wgucalendar.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Term implements Parcelable{
+public class Term implements Parcelable {
     private long id;
     private String title;
     private String start;

@@ -1,6 +1,9 @@
 package herold.wgucalendar.model;
 
-public class Course {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Course implements Parcelable {
     private long id;
     private String title;
     private String startDate;
@@ -50,6 +53,50 @@ public class Course {
         this.notes = notes;
         this.termId = termId;
     }
+
+    public Course(Parcel source) {
+        this.id = source.readLong();
+        this.title = source.readString();
+        this.startDate = source.readString();
+        this.endDate = source.readString();
+        this.status = source.readString();
+        this.mentorName = source.readString();
+        this.mentorPhone = source.readString();
+        this.mentorEmail = source.readString();
+        this.notes = source.readString();
+        this.termId = source.readLong();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(startDate);
+        dest.writeString(endDate);
+        dest.writeString(status);
+        dest.writeString(mentorName);
+        dest.writeString(mentorPhone);
+        dest.writeString(mentorEmail);
+        dest.writeString(notes);
+        dest.writeLong(termId);
+    }
+
+    public static final Creator<Course> CREATOR = new Creator<Course>() {
+        @Override
+        public Course[] newArray(int size) {
+            return new Course[size];
+        }
+
+        @Override
+        public Course createFromParcel(Parcel source) {
+            return new Course(source);
+        }
+    };
 
     @Override
     public String toString() {
