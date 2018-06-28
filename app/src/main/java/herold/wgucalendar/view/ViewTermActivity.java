@@ -48,7 +48,7 @@ public class ViewTermActivity extends AppCompatActivity {
     private ListView lvCourses;
     private List<Course> courses;
     private Term term;
-    private TermData datasource;
+    private TermData termData;
     private CourseData courseData;
     private CourseAdapter adapter;
 
@@ -57,8 +57,8 @@ public class ViewTermActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_term);
         term = getIntent().getParcelableExtra("Term");
-        datasource = new TermData(this);
-        datasource.open();
+        termData = new TermData(this);
+        termData.open();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -112,9 +112,9 @@ public class ViewTermActivity extends AppCompatActivity {
         lvCourses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView lv, View v, int position, long id) {
-//                Intent intent = new Intent(context, ViewCourseActivity.class);
-//                intent.putExtra("Course", (Course) lv.getItemAtPosition(position));
-//                startActivityForResult(intent, 0);
+                Intent intent = new Intent(context, ViewCourseActivity.class);
+                intent.putExtra("Course", (Course) lv.getItemAtPosition(position));
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -136,7 +136,7 @@ public class ViewTermActivity extends AppCompatActivity {
         if (false) {
             // has terms, show alert
         } else {
-            datasource.deleteTerm(term);
+            termData.deleteTerm(term);
             setResult(ViewHelper.DATA_SET_CHANGED);
             finish();
         }
@@ -216,7 +216,7 @@ public class ViewTermActivity extends AppCompatActivity {
         term.setTitle(txtTermTitle.getText().toString());
         term.setStart(txtStartDate.getText().toString());
         term.setEnd(txtEndDate.getText().toString());
-        datasource.updateTerm(term);
+        termData.updateTerm(term);
         setResult(ViewHelper.DATA_SET_CHANGED);
         finish();
     }

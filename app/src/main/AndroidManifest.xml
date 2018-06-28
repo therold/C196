@@ -41,5 +41,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.ViewTermActivity" />
         </activity>
+        <activity android:name=".view.ViewCourseActivity"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.ViewTermActivity" />
+        </activity>
     </application>
 </manifest>

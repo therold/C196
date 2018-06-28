@@ -11,6 +11,11 @@
     <string name="delete_course">Delete Course</string>
     <string name="all_course">View All Courses</string>
     <string name="view_course">View Course</string>
+    <string name="add_assessment">Add Course</string>
+    <string name="edit_assessment">Edit Course</string>
+    <string name="delete_assessment">Delete Course</string>
+    <string name="all_assessment">View All Courses</string>
+    <string name="view_assessment">View Course</string>
     <string name="date_format">MM/dd/yy</string>
     <string name="title">Title</string>
     <string name="start">Start</string>
@@ -24,6 +29,7 @@
     <string name="mentor_email">Mentor Email</string>
     <string name="notes">Notes</string>
     <string name="courses">Courses:</string>
+    <string name="assessments">Assessments:</string>
 
     <string-array name="status_array">
         <item>Plan to Take</item>
