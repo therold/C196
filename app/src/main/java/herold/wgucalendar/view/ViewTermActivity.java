@@ -88,9 +88,7 @@ public class ViewTermActivity extends AppCompatActivity {
         AdapterView.OnItemClickListener lvListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView lv, View v, int position, long id) {
-                Intent intent = new Intent(context, ViewCourseActivity.class);
-                intent.putExtra("Course", (Course) lv.getItemAtPosition(position));
-                startActivityForResult(intent, 0);
+                viewCourse((Course) lv.getItemAtPosition(position));
             }
         };
         lvCourses.setOnItemClickListener(lvListener);
@@ -100,13 +98,13 @@ public class ViewTermActivity extends AppCompatActivity {
                 drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.nav_add_course:
-                        tryAddCourse();
+                        addCourse();
                         break;
                     case R.id.nav_edit_term:
-                        tryEditTerm();
+                        editTerm();
                         break;
                     case R.id.nav_delete_term:
-                        tryDeleteTerm(term);
+                        deleteTerm(term);
                         break;
                 }
                 return true;
@@ -120,13 +118,19 @@ public class ViewTermActivity extends AppCompatActivity {
         imgMenu.setOnClickListener(imgMenuListener);
     }
 
-    private void tryAddCourse() {
+    private void addCourse() {
         Intent intent = new Intent(context, AddCourseActivity.class);
         intent.putExtra("Term", term);
-        startActivityForResult(intent, 0);
+        startActivity(intent);
     }
 
-    private void tryDeleteTerm(Term term) {
+    private void viewCourse(Course course) {
+        Intent intent = new Intent(context, ViewCourseActivity.class);
+        intent.putExtra("Course", course);
+        startActivity(intent);
+    }
+
+    private void deleteTerm(Term term) {
         // TODO check if Term contains any Course
         if (false) {
             // has terms, show alert
@@ -137,7 +141,7 @@ public class ViewTermActivity extends AppCompatActivity {
         }
     }
 
-    private void tryEditTerm() {
+    private void editTerm() {
         oTitle = txtTermTitle.getText().toString();
         oStart = txtStartDate.getText().toString();
         oEnd = txtEndDate.getText().toString();
@@ -203,19 +207,12 @@ public class ViewTermActivity extends AppCompatActivity {
     }
 
     @Override
-    protected  void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == ViewHelper.DATA_SET_CHANGED) {
-            courseData.open();
-            courses = courseData.findByTerm(term.getId());
-            adapter.clear();
-            adapter.addAll(courses);
-        }
-    }
-
-    @Override
     protected void onResume() {
         courseData.open();
         termData.open();
+        courses = courseData.findByTerm(term.getId());
+        adapter.clear();
+        adapter.addAll(courses);
         super.onResume();
     }
 
