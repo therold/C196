@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,14 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import herold.wgucalendar.R;
+import herold.wgucalendar.data.AssessmentData;
 import herold.wgucalendar.data.CourseData;
 import herold.wgucalendar.model.Assessment;
 import herold.wgucalendar.model.Course;
 
 public class ViewCourseActivity extends AppCompatActivity {
+    private AssessmentAdapter adapter;
+    private AssessmentData assessmentData;
     private Context context = this;
     private Course course;
-    private CourseAdapter adapter;
     private CourseData courseData;
     private DrawerLayout drawerLayout;
     private EditText txtTerm;
@@ -109,6 +112,19 @@ public class ViewCourseActivity extends AppCompatActivity {
         txtMentorEmail.setText(course.getMentorEmail());
         txtNotes.setText(course.getNotes());
 
+        assessmentData = new AssessmentData(this);
+        assessmentData.open();
+        assessments = assessmentData.findByCourse(course.getId());
+        adapter = new AssessmentAdapter(this, assessments);
+        lvAssessments.setAdapter(adapter);
+        AdapterView.OnItemClickListener lvListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView lv, View v, int position, long id) {
+                viewAssessment((Assessment) lv.getItemAtPosition(position));
+            }
+        };
+        lvAssessments.setOnItemClickListener(lvListener);
+
         NavigationView.OnNavigationItemSelectedListener navListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -133,28 +149,16 @@ public class ViewCourseActivity extends AppCompatActivity {
             public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.END); }
         };
         imgMenu.setOnClickListener(menuClickListener);
-
-        // TODO add support for assessments
-//        courseData = new CourseData(this);
-//        courseData.open();
-//        lvCourses = findViewById(R.id.lvCourses);
-//        courses = courseData.findByTerm(term.getId());
-//        adapter = new CourseAdapter(this, courses);
-//        lvCourses.setAdapter(adapter);
-//        lvCourses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView lv, View v, int position, long id) {
-//                Intent intent = new Intent(context, ViewCourseActivity.class);
-//                intent.putExtra("Course", (Course) lv.getItemAtPosition(position));
-//                startActivityForResult(intent, 0);
-//            }
-//        });
     }
 
     private void addAssessment() {
         Intent intent = new Intent(context, AddAssessmentActivity.class);
         intent.putExtra("Course", course);
         startActivity(intent);
+    }
+
+    private void viewAssessment(Assessment assessment) {
+
     }
 
     private void deleteCourse(Course course) {

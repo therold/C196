@@ -21,7 +21,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Course course = getItem(position);
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_term, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_course, parent, false);
         }
         TextView txtTitle = convertView.findViewById(R.id.txtTitle);
         TextView txtStart = convertView.findViewById(R.id.txtStart);
