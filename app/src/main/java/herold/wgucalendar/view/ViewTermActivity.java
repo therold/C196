@@ -106,7 +106,7 @@ public class ViewTermActivity extends AppCompatActivity {
                         editTerm();
                         break;
                     case R.id.nav_delete_term:
-                        deleteTerm(term);
+                        deleteTerm();
                         break;
                 }
                 return true;
@@ -132,10 +132,10 @@ public class ViewTermActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void deleteTerm(Term term) {
+    private void deleteTerm() {
         if (courses.size() > 0) {
             AlertDialog.Builder builder = ViewHelper.getDialog(context, R.string.error_has_children_term,
-                    R.string.error_message_has_children_courses);
+                    R.string.error_has_children_term_message);
             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {}

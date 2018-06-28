@@ -1,11 +1,13 @@
 package herold.wgucalendar.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -137,7 +139,7 @@ public class ViewCourseActivity extends AppCompatActivity {
                         editCourse();
                         break;
                     case R.id.nav_delete_course:
-                        deleteCourse(course);
+                        deleteCourse();
                         break;
                 }
                 return true;
@@ -163,14 +165,29 @@ public class ViewCourseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void deleteCourse(Course course) {
-        // TODO check if Course contains any Assessment
-        if (false) {
-            // has terms, show alert
+    private void deleteCourse() {
+        if (assessments.size() > 0) {
+            AlertDialog.Builder builder = ViewHelper.getDialog(context, R.string.error_has_children_course,
+                    R.string.error_has_children_course_message);
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            });
+            builder.show();
         } else {
-            courseData.deleteCourse(course);
-            setResult(ViewHelper.DATA_SET_CHANGED);
-            finish();
+            AlertDialog.Builder builder = ViewHelper.getDialog(context, R.string.confirm_delete,
+                    R.string.confirm_delete_message);
+            final Course courseToDelete = course;
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    courseData.deleteCourse(courseToDelete);
+                    finish();
+                }
+            });
+            builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {}
+            });
+            builder.show();
         }
     }
 

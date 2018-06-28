@@ -1,10 +1,12 @@
 package herold.wgucalendar.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -98,14 +100,19 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     }
 
     private void deleteAssessment() {
-        // TODO check if Course contains any Assessment
-        if (false) {
-            // has terms, show alert
-        } else {
-//            courseData.deleteCourse(course);
-//            setResult(ViewHelper.DATA_SET_CHANGED);
-//            finish();
-        }
+        AlertDialog.Builder builder = ViewHelper.getDialog(context, R.string.confirm_delete,
+                R.string.confirm_delete_message);
+        final Assessment assessmentToDelete = assessment;
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                assessmentData.deleteAssessment(assessmentToDelete);
+                finish();
+            }
+        });
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {}
+        });
+        builder.show();
     }
 
     private void editAssessment() {

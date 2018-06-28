@@ -34,7 +34,9 @@
     <string name="courses">Courses:</string>
     <string name="assessments">Assessments:</string>
     <string name="error_has_children_term">Cannot delete term</string>
-    <string name="error_message_has_children_courses">Remove all courses before deleting term.</string>
+    <string name="error_has_children_term_message">Remove all courses before deleting term.</string>
+    <string name="error_has_children_course">Cannot delete course</string>
+    <string name="error_has_children_course_message">Remove all assessments before deleting course.</string>
     <string name="confirm_delete">Delete entry</string>
     <string name="confirm_delete_message">Are you sure you want to delete this entry?</string>
 
