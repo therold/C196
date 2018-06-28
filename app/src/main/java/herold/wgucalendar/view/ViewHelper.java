@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -89,6 +90,20 @@ public class ViewHelper {
             @Override
             public void onClick(View v) { startDatePickerDialog.show(); }
         });
+    }
+
+    public static AlertDialog.Builder getDialog(Context context, String title, String message) {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+        builder.setTitle(title)
+            .setMessage(message)
+            .setIcon(android.R.drawable.ic_dialog_alert);
+        return builder;
+    }
+
+    public static AlertDialog.Builder getDialog(Context context, int title, int message) {
+        return getDialog(context, context.getResources().getString(title),
+                context.getResources().getString(message));
     }
 
 }

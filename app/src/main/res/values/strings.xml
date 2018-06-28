@@ -30,6 +30,10 @@
     <string name="notes">Notes</string>
     <string name="courses">Courses:</string>
     <string name="assessments">Assessments:</string>
+    <string name="error_has_children_term">Cannot delete term</string>
+    <string name="error_message_has_children_courses">Remove all courses before deleting term.</string>
+    <string name="confirm_delete">Delete entry</string>
+    <string name="confirm_delete_message">Are you sure you want to delete this entry?</string>
 
     <string-array name="status_array">
         <item>Plan to Take</item>

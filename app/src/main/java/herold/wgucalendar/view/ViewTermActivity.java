@@ -1,11 +1,13 @@
 package herold.wgucalendar.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -131,13 +133,28 @@ public class ViewTermActivity extends AppCompatActivity {
     }
 
     private void deleteTerm(Term term) {
-        // TODO check if Term contains any Course
-        if (false) {
-            // has terms, show alert
+        if (courses.size() > 0) {
+            AlertDialog.Builder builder = ViewHelper.getDialog(context, R.string.error_has_children_term,
+                    R.string.error_message_has_children_courses);
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            });
+            builder.show();
         } else {
-            termData.deleteTerm(term);
-            setResult(ViewHelper.DATA_SET_CHANGED);
-            finish();
+            AlertDialog.Builder builder = ViewHelper.getDialog(context, R.string.confirm_delete,
+                    R.string.confirm_delete_message);
+            final Term termToDelete = term;
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    termData.deleteTerm(termToDelete);
+                    finish();
+                }
+            });
+            builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {}
+            });
+            builder.show();
         }
     }
 
