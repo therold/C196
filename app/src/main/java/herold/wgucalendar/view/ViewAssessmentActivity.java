@@ -22,16 +22,21 @@ import java.util.List;
 
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.AssessmentData;
+import herold.wgucalendar.data.CourseData;
 import herold.wgucalendar.model.Assessment;
+import herold.wgucalendar.model.Course;
 
 public class ViewAssessmentActivity extends AppCompatActivity {
     private Assessment assessment;
     private AssessmentData assessmentData;
     private Context context = this;
+    private Course course;
+    private CourseData courseData;
     private DrawerLayout drawerLayout;
     private EditText txtCourse;
     private EditText txtTitle;
     private EditText txtDueDate;
+    private EditText txtNotes;
     private ImageView imgMenu;
     private LinearLayout cntLayout;
     private LinearLayout buttonBar;
@@ -42,6 +47,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     private String oTitle;
     private String oDueDate;
     private String oType;
+    private String oNotes;
     private Toolbar toolbar;
 
     @Override
@@ -53,6 +59,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         txtCourse = findViewById(R.id.txtCourse);
         txtTitle = findViewById(R.id.txtTitle);
         txtDueDate = findViewById(R.id.txtDueDate);
+        txtNotes = findViewById(R.id.txtNotes);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
         imgMenu = findViewById(R.id.imgMenu);
@@ -65,8 +72,10 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         inputs.add(txtCourse);
         inputs.add(txtTitle);
         inputs.add(txtDueDate);
+        inputs.add(txtNotes);
         for(View input : inputs) { input.setEnabled(false); }
 
+        course = getIntent().getParcelableExtra("Course");
         assessment = getIntent().getParcelableExtra("Assessment");
         assessmentData = new AssessmentData(this);
         assessmentData.open();
@@ -75,6 +84,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         txtCourse.setText(Long.toString(assessment.getCourseId()));
         txtTitle.setText(assessment.getTitle());
         txtDueDate.setText(assessment.getDueDate());
+        txtNotes.setText(course.getNotes());
 
         NavigationView.OnNavigationItemSelectedListener navListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -120,6 +130,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         oTitle = txtTitle.getText().toString();
         oDueDate = txtDueDate.getText().toString();
         oType = cboType.getSelectedItem().toString();
+        oNotes = txtNotes.getText().toString();
 
         for(View input : inputs) { input.setEnabled(true); }
         for(View input : inputs) { input.setFocusable(true); }
@@ -153,6 +164,9 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         assessment.setTitle(txtTitle.getText().toString());
         assessment.setDueDate(txtDueDate.getText().toString());
         assessment.setType(cboType.getSelectedItem().toString());
+        assessmentData.updateAssessment(assessment);
+        course.setNotes(txtNotes.getText().toString());
+        courseData.updateCourse(course);
         finish();
     }
 
@@ -168,6 +182,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         txtCourse.setText(oCourse);
         txtTitle.setText(oTitle);
         txtDueDate.setText(oDueDate);
+        txtNotes.setText(oNotes);
         cboType.setSelection(getIndex(cboType, oType));
         ViewHelper.closeKeyboard(this);
     }
