@@ -158,7 +158,9 @@ public class ViewCourseActivity extends AppCompatActivity {
     }
 
     private void viewAssessment(Assessment assessment) {
-
+        Intent intent = new Intent(context, ViewAssessmentActivity.class);
+        intent.putExtra("Assessment", assessment);
+        startActivity(intent);
     }
 
     private void deleteCourse(Course course) {
@@ -252,6 +254,23 @@ public class ViewCourseActivity extends AppCompatActivity {
         txtMentorEmail.setText(oMentorEmail);
         txtNotes.setText(oNotes);
         ViewHelper.closeKeyboard(this);
+    }
+
+    @Override
+    protected void onResume() {
+        courseData.open();
+        assessmentData.open();
+        assessments = assessmentData.findByCourse(course.getId());
+        adapter.clear();
+        adapter.addAll(assessments);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        courseData.close();
+        assessmentData.close();
+        super.onPause();
     }
 
     private int getIndex(Spinner spinner, String myString){

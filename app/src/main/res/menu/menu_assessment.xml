@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_edit_assessment"
+            android:title="@string/edit_assessment" />
+        <item
+            android:id="@+id/nav_delete_assessment"
+            android:title="@string/delete_assessment" />
+    </group>
+</menu>

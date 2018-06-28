@@ -68,7 +68,7 @@ public class AddAssessmentActivity extends AppCompatActivity {
         String title = txtTitle.getText().toString();
         String dueDate = txtDueDate.getText().toString();
         String type = cboType.getSelectedItem().toString();
-        assessmentData.createAssessment(title, dueDate, type, course.getId());
+        assessmentData.createAssessment(title, type, dueDate, course.getId());
         finish();
     }
 
