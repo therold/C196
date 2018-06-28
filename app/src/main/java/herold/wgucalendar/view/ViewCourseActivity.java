@@ -1,19 +1,15 @@
 package herold.wgucalendar.view;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,11 +17,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.CourseData;
@@ -33,8 +26,27 @@ import herold.wgucalendar.model.Assessment;
 import herold.wgucalendar.model.Course;
 
 public class ViewCourseActivity extends AppCompatActivity {
-    private DrawerLayout drawerLayout;
     private Context context = this;
+    private Course course;
+    private CourseAdapter adapter;
+    private CourseData courseData;
+    private DrawerLayout drawerLayout;
+    private EditText txtTerm;
+    private EditText txtTitle;
+    private EditText txtStartDate;
+    private EditText txtEndDate;
+    private EditText txtMentorName;
+    private EditText txtMentorPhone;
+    private EditText txtMentorEmail;
+    private EditText txtNotes;
+    private ImageView imgMenu;
+    private LinearLayout cntLayout;
+    private LinearLayout buttonBar;
+    private List<Assessment> assessments;
+    private List<View> inputs;
+    private ListView lvAssessments;
+    private NavigationView navigationView;
+    private Spinner cboStatus;
     private String oTerm;
     private String oTitle;
     private String oStart;
@@ -44,29 +56,8 @@ public class ViewCourseActivity extends AppCompatActivity {
     private String oMentorPhone;
     private String oMentorEmail;
     private String oNotes;
-    private Calendar startDate = Calendar.getInstance();
-    private Calendar endDate = Calendar.getInstance();
-    private EditText txtTerm;
-    private EditText txtTitle;
-    private EditText txtStartDate;
-    private EditText txtEndDate;
-    private EditText txtMentorName;
-    private EditText txtMentorPhone;
-    private EditText txtMentorEmail;
-    private EditText txtNotes;
-    private Spinner cboStatus;
-    private LinearLayout cntLayout;
-    private LinearLayout buttonBar;
-    private NavigationView navigationView;
     private TextView lblAssessment;
-    private ListView lvAssessments;
-    private List<Assessment> assessments;
-    private ImageView imgMenu;
-    private List<View> inputs;
     private Toolbar toolbar;
-    private Course course;
-    private CourseData courseData;
-    private CourseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,18 +80,35 @@ public class ViewCourseActivity extends AppCompatActivity {
         imgMenu = findViewById(R.id.imgMenu);
         cntLayout = findViewById(R.id.cntLayout);
         toolbar = findViewById(R.id.toolbar);
+        ViewHelper.setUpToolbar(this, toolbar, R.string.view_term);
+
+        inputs = new ArrayList<>();
+        inputs.add(cboStatus);
+        inputs.add(txtTerm);
+        inputs.add(txtTitle);
+        inputs.add(txtStartDate);
+        inputs.add(txtEndDate);
+        inputs.add(txtMentorName);
+        inputs.add(txtMentorPhone);
+        inputs.add(txtMentorEmail);
+        inputs.add(txtNotes);
+        for(View input : inputs) { input.setEnabled(false); }
 
         course = getIntent().getParcelableExtra("Course");
         courseData = new CourseData(this);
         courseData.open();
 
+        cboStatus.setSelection(getIndex(cboStatus, course.getStatus()));
+        txtTerm.setText(Long.toString(course.getTermId()));
+        txtTitle.setText(course.getTitle());
+        txtStartDate.setText(course.getStart());
+        txtEndDate.setText(course.getEnd());
+        txtMentorName.setText(course.getMentorName());
+        txtMentorPhone.setText(course.getMentorPhone());
+        txtMentorEmail.setText(course.getMentorEmail());
+        txtNotes.setText(course.getNotes());
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.view_course);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-
-        navigationView.setNavigationItemSelectedListener( new NavigationView.OnNavigationItemSelectedListener() {
+        NavigationView.OnNavigationItemSelectedListener navListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 drawerLayout.closeDrawers();
@@ -117,35 +125,13 @@ public class ViewCourseActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
-
+        };
+        navigationView.setNavigationItemSelectedListener(navListener);
         View.OnClickListener menuClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.END); }
         };
         imgMenu.setOnClickListener(menuClickListener);
-
-        inputs = new ArrayList<>();
-        inputs.add(cboStatus);
-        inputs.add(txtTerm);
-        inputs.add(txtTitle);
-        inputs.add(txtStartDate);
-        inputs.add(txtEndDate);
-        inputs.add(txtMentorName);
-        inputs.add(txtMentorPhone);
-        inputs.add(txtMentorEmail);
-        inputs.add(txtNotes);
-        for(View input : inputs) { input.setEnabled(false); }
-
-        cboStatus.setSelection(getIndex(cboStatus, course.getStatus()));
-        txtTerm.setText(Long.toString(course.getTermId()));
-        txtTitle.setText(course.getTitle());
-        txtStartDate.setText(course.getStart());
-        txtEndDate.setText(course.getEnd());
-        txtMentorName.setText(course.getMentorName());
-        txtMentorPhone.setText(course.getMentorPhone());
-        txtMentorEmail.setText(course.getMentorEmail());
-        txtNotes.setText(course.getNotes());
 
         // TODO add support for assessments
 //        courseData = new CourseData(this);
@@ -162,12 +148,6 @@ public class ViewCourseActivity extends AppCompatActivity {
 //                startActivityForResult(intent, 0);
 //            }
 //        });
-    }
-
-    private void updateLabel(EditText e, Calendar c) {
-        String myFormat = getResources().getString(R.string.date_format);
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        e.setText(sdf.format(c.getTime()));
     }
 
     private void tryAddAssessment() {
@@ -209,45 +189,9 @@ public class ViewCourseActivity extends AppCompatActivity {
         lvAssessments.setVisibility(View.GONE);
         imgMenu.setEnabled(false);
         imgMenu.setVisibility(View.GONE);
+        ViewHelper.setupDateInput(this, txtStartDate);
+        ViewHelper.setupDateInput(this, txtEndDate);
 
-        DatePickerDialog.OnDateSetListener startDateListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                startDate.set(Calendar.YEAR, year);
-                startDate.set(Calendar.MONTH, monthOfYear);
-                startDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(txtStartDate, startDate);
-            }
-        };
-        DatePickerDialog.OnDateSetListener endDateListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                endDate.set(Calendar.YEAR, year);
-                endDate.set(Calendar.MONTH, monthOfYear);
-                endDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(txtEndDate, endDate);
-            }
-        };
-
-        final DatePickerDialog startDatePickerDialog = new DatePickerDialog(
-                this, startDateListener, startDate.get(Calendar.YEAR),
-                startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH));
-
-        final DatePickerDialog endDatePickerDialog = new DatePickerDialog(
-                this, endDateListener,  endDate.get(Calendar.YEAR),
-                endDate.get(Calendar.MONTH), endDate.get(Calendar.DAY_OF_MONTH));
-
-
-        txtStartDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { startDatePickerDialog.show(); }
-        });
-        txtEndDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { endDatePickerDialog.show(); }
-        });
         buttonBar = new LinearLayout(context);
         Button btnSave = new Button(context);
         btnSave.setText(R.string.save);
@@ -302,12 +246,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         txtMentorPhone.setText(oMentorPhone);
         txtMentorEmail.setText(oMentorEmail);
         txtNotes.setText(oNotes);
-
-        InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+        ViewHelper.closeKeyboard(this);
     }
 
     private int getIndex(Spinner spinner, String myString){
