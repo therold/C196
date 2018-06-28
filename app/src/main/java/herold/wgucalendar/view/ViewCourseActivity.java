@@ -80,7 +80,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         imgMenu = findViewById(R.id.imgMenu);
         cntLayout = findViewById(R.id.cntLayout);
         toolbar = findViewById(R.id.toolbar);
-        ViewHelper.setUpToolbar(this, toolbar, R.string.view_term);
+        ViewHelper.setupToolbar(this, toolbar, R.string.view_term);
 
         inputs = new ArrayList<>();
         inputs.add(cboStatus);

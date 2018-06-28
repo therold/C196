@@ -65,7 +65,7 @@ public class ViewTermActivity extends AppCompatActivity {
         cntLayout = findViewById(R.id.cntLayout);
         lblCourses = findViewById(R.id.lblCourses);
         toolbar = findViewById(R.id.toolbar);
-        ViewHelper.setUpToolbar(this, toolbar, R.string.view_term);
+        ViewHelper.setupToolbar(this, toolbar, R.string.view_term);
 
         inputs = new ArrayList<>();
         inputs.add(txtTermTitle);

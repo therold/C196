@@ -53,7 +53,7 @@ public class ViewHelper {
         }
     }
 
-    public static void setUpToolbar(AppCompatActivity activity, Toolbar toolbar, int title) {
+    public static void setupToolbar(AppCompatActivity activity, Toolbar toolbar, int title) {
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setTitle(title);
         ActionBar actionbar = activity.getSupportActionBar();
@@ -67,15 +67,7 @@ public class ViewHelper {
         inputManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
-    private static void update(Activity activity, EditText editText, Calendar cal, int year,
-                        int monthOfYear, int dayOfMonth) {
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, monthOfYear);
-        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String myFormat = activity.getResources().getString(R.string.date_format);
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        editText.setText(sdf.format(cal.getTime()));
-    }
+
     public static void setupDateInput(final Activity activity, final EditText editText) {
         final Calendar calendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
