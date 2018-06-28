@@ -36,6 +36,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     private Context context = this;
     private Course course;
     private CourseData courseData;
+    private long courseId;
     private DrawerLayout drawerLayout;
     private EditText txtTerm;
     private EditText txtTitle;
@@ -100,24 +101,12 @@ public class ViewCourseActivity extends AppCompatActivity {
         inputs.add(txtNotes);
         for(View input : inputs) { input.setEnabled(false); }
 
-        course = getIntent().getParcelableExtra("Course");
         courseData = new CourseData(this);
-        courseData.open();
-
-        cboStatus.setSelection(getIndex(cboStatus, course.getStatus()));
-        txtTerm.setText(Long.toString(course.getTermId()));
-        txtTitle.setText(course.getTitle());
-        txtStartDate.setText(course.getStart());
-        txtEndDate.setText(course.getEnd());
-        txtMentorName.setText(course.getMentorName());
-        txtMentorPhone.setText(course.getMentorPhone());
-        txtMentorEmail.setText(course.getMentorEmail());
-        txtNotes.setText(course.getNotes());
-
         assessmentData = new AssessmentData(this);
-        assessmentData.open();
-        assessments = assessmentData.findByCourse(course.getId());
+        courseId = getIntent().getLongExtra("CourseId", 0);
+        assessments = new ArrayList<>();
         adapter = new AssessmentAdapter(this, assessments);
+        loadData();
         lvAssessments.setAdapter(adapter);
         AdapterView.OnItemClickListener lvListener = new AdapterView.OnItemClickListener() {
             @Override
@@ -274,13 +263,28 @@ public class ViewCourseActivity extends AppCompatActivity {
         ViewHelper.closeKeyboard(this);
     }
 
-    @Override
-    protected void onResume() {
+    private void loadData() {
         courseData.open();
+        course = courseData.get(courseId);
+        cboStatus.setSelection(getIndex(cboStatus, course.getStatus()));
+        txtTerm.setText(Long.toString(course.getTermId()));
+        txtTitle.setText(course.getTitle());
+        txtStartDate.setText(course.getStart());
+        txtEndDate.setText(course.getEnd());
+        txtMentorName.setText(course.getMentorName());
+        txtMentorPhone.setText(course.getMentorPhone());
+        txtMentorEmail.setText(course.getMentorEmail());
+        txtNotes.setText(course.getNotes());
+
         assessmentData.open();
         assessments = assessmentData.findByCourse(course.getId());
         adapter.clear();
         adapter.addAll(assessments);
+    }
+
+    @Override
+    protected void onResume() {
+        loadData();
         super.onResume();
     }
 

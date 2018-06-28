@@ -78,6 +78,15 @@ public class CourseData {
         database.delete(TABLE, COLUMN_ID + " = " + id,null);
     }
 
+    public Course get(long id) {
+        Cursor cursor = database.query(TABLE, allColumns,
+                COLUMN_ID + " = " + id, null, null, null, null);
+        cursor.moveToFirst();
+        Course course = cursorToCourse(cursor);
+        cursor.close();
+        return course;
+    }
+
     public List<Course> all() {
         List<Course> courses = new ArrayList<>();
         Cursor cursor = database.query(TABLE, allColumns,

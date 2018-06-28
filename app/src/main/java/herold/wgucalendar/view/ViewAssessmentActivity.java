@@ -76,9 +76,12 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         for(View input : inputs) { input.setEnabled(false); }
 
         course = getIntent().getParcelableExtra("Course");
+        courseData = new CourseData(this);
+        courseData.open();
         assessment = getIntent().getParcelableExtra("Assessment");
         assessmentData = new AssessmentData(this);
         assessmentData.open();
+
 
         cboType.setSelection(getIndex(cboType, assessment.getType()));
         txtCourse.setText(Long.toString(assessment.getCourseId()));

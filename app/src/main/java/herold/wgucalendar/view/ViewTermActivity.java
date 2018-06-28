@@ -128,7 +128,7 @@ public class ViewTermActivity extends AppCompatActivity {
 
     private void viewCourse(Course course) {
         Intent intent = new Intent(context, ViewCourseActivity.class);
-        intent.putExtra("Course", course);
+        intent.putExtra("CourseId", course.getId());
         startActivity(intent);
     }
 
