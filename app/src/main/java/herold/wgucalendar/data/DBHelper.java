@@ -3,7 +3,6 @@ package herold.wgucalendar.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -64,7 +63,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static long stringToTimestamp(String date) {
         String isoDate = "20" + date.substring(6, 8) + "-" + date.substring(0, 2)
                 + "-" + date.substring(3, 5) + " 00:00:00";
-        Log.v("test", isoDate);
         Timestamp timestamp = Timestamp.valueOf(isoDate);
         return timestamp.getTime();
     }
