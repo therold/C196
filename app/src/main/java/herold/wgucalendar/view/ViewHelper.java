@@ -67,6 +67,21 @@ public class ViewHelper {
             case R.id.nav_all_course:
                 ViewHelper.switchToActivity(context, AllCourseActivity.class);
                 break;
+            case R.id.nav_course_by_term:
+                ViewHelper.switchToActivity(context, AddTermActivity.class);
+                break;
+            case R.id.nav_add_assessment:
+                ViewHelper.switchToActivity(context, AddTermActivity.class);
+                break;
+            case R.id.nav_all_assessment:
+                ViewHelper.switchToActivity(context, AllAssessmentActivity.class);
+                break;
+            case R.id.nav_assessment_by_course:
+                ViewHelper.switchToActivity(context, AddTermActivity.class);
+                break;
+            case R.id.nav_notifications:
+                ViewHelper.switchToActivity(context, AddTermActivity.class);
+                break;
         }
     }
 

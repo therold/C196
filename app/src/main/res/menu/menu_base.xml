@@ -17,5 +17,27 @@
         <item
             android:id="@+id/nav_all_course"
             android:title="@string/all_course" />
+        <item
+            android:id="@+id/nav_course_by_term"
+            android:title="@string/view_course_by_term" />
+    </group>
+    <group android:checkableBehavior="none"
+        android:id="@+id/grpAssessment">
+        <item
+            android:id="@+id/nav_add_assessment"
+            android:title="@string/add_assessment" />
+        <item
+            android:id="@+id/nav_all_assessment"
+            android:title="@string/all_assessment" />
+        <item
+            android:id="@+id/nav_assessment_by_course"
+            android:title="@string/view_assessment_by_course" />
+    </group>
+    <group android:checkableBehavior="none"
+        android:id="@+id/grpNotifications">
+        <item
+            android:id="@+id/nav_notifications"
+            android:title="@string/view_notifications" />
+
     </group>
 </menu>

@@ -16,17 +16,17 @@ import android.widget.ListView;
 import java.util.List;
 
 import herold.wgucalendar.R;
-import herold.wgucalendar.data.CourseData;
-import herold.wgucalendar.model.Course;
+import herold.wgucalendar.data.AssessmentData;
+import herold.wgucalendar.model.Assessment;
 
-public class AllCourseActivity extends AppCompatActivity {
+public class AllAssessmentActivity extends AppCompatActivity {
+    private AssessmentAdapter adapter;
+    private AssessmentData assessmentData;
     private Context context = this;
-    private CourseAdapter adapter;
-    private CourseData courseData;
     private DrawerLayout drawerLayout;
     private ImageView imgMenu;
-    private List<Course> courses;
-    private ListView lvCourses;
+    private List<Assessment> assessments;
+    private ListView lvAssessments;
     private NavigationView navigationView;
 
 
@@ -35,24 +35,24 @@ public class AllCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_course);
+        setContentView(R.layout.activity_all_assessment);
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         imgMenu = findViewById(R.id.imgMenu);
-        lvCourses = findViewById(R.id.lvCourses);
+        lvAssessments = findViewById(R.id.lvAssessments);
 
         ViewHelper.setupToolbar(this, toolbar, R.string.all_course);
-        courseData = new CourseData(this);
-        courseData.open();
-        courses = courseData.all();
-        adapter = new CourseAdapter(this, courses);
-        lvCourses.setAdapter(adapter);
-        lvCourses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        assessmentData = new AssessmentData(this);
+        assessmentData.open();
+        assessments = assessmentData.all();
+        adapter = new AssessmentAdapter(this, assessments);
+        lvAssessments.setAdapter(adapter);
+        lvAssessments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView lv, View v, int position, long id) {
-                viewCourse((Course) lv.getItemAtPosition(position));
+                viewAssessment((Assessment) lv.getItemAtPosition(position));
             }
         });
         navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(context, drawerLayout));
@@ -62,25 +62,25 @@ public class AllCourseActivity extends AppCompatActivity {
         });
     }
 
-    private void viewCourse(Course course) {
+    private void viewAssessment(Assessment assessment) {
         Intent intent = new Intent(context, ViewCourseActivity.class);
-        intent.putExtra("CourseId", course.getId());
+        intent.putExtra("Assessment", assessment.getId());
         startActivity(intent);
     }
 
     @Override
     protected void onResume() {
-        courseData.open();
-        courses = courseData.all();
+        assessmentData.open();
+        assessments = assessmentData.all();
         adapter.clear();
-        adapter.addAll(courses);
+        adapter.addAll(assessments);
         adapter.notifyDataSetChanged();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        courseData.close();
+        assessmentData.close();
         super.onPause();
     }
 }
