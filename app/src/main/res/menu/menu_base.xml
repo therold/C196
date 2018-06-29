@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <group android:checkableBehavior="none">
+    <group android:checkableBehavior="none"
+        android:id="@+id/grpTerm">
         <item
             android:id="@+id/nav_add_term"
             android:title="@string/add_term" />
         <item
             android:id="@+id/nav_all_term"
             android:title="@string/all_term" />
-
+    </group>
+    <group android:checkableBehavior="none"
+        android:id="@+id/grpCourse">
+        <item
+            android:id="@+id/nav_add_course"
+            android:title="@string/add_course" />
+        <item
+            android:id="@+id/nav_all_course"
+            android:title="@string/all_course" />
     </group>
 </menu>

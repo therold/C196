@@ -300,6 +300,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         assessments = assessmentData.findByCourse(course.getId());
         adapter.clear();
         adapter.addAll(assessments);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -16,41 +16,42 @@ import android.widget.ListView;
 import java.util.List;
 
 import herold.wgucalendar.R;
-import herold.wgucalendar.data.TermData;
-import herold.wgucalendar.model.Term;
+import herold.wgucalendar.data.CourseData;
+import herold.wgucalendar.model.Course;
 
-public class AllTermActivity extends AppCompatActivity {
+public class AllCourseActivity extends AppCompatActivity {
     private Context context = this;
+    private CourseData courseData;
     private DrawerLayout drawerLayout;
     private ImageView imgMenu;
-    private List<Term> terms;
-    private ListView lvTerms;
+    private List<Course> courses;
+    private ListView lvCourses;
     private NavigationView navigationView;
-    private TermAdapter adapter;
-    private TermData termData;
+    private CourseAdapter adapter;
+
     private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_term);
+        setContentView(R.layout.activity_all_course);
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         imgMenu = findViewById(R.id.imgMenu);
-        lvTerms = findViewById(R.id.lvTerms);
+        lvCourses = findViewById(R.id.lvCourses);
 
-        ViewHelper.setupToolbar(this, toolbar, R.string.all_term);
-        termData = new TermData(this);
-        termData.open();
-        terms = termData.all();
-        adapter = new TermAdapter(this, terms);
-        lvTerms.setAdapter(adapter);
-        lvTerms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ViewHelper.setupToolbar(this, toolbar, R.string.all_course);
+        courseData = new CourseData(this);
+        courseData.open();
+        courses = courseData.all();
+        adapter = new CourseAdapter(this, courses);
+        lvCourses.setAdapter(adapter);
+        lvCourses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView lv, View v, int position, long id) {
-                viewTerm((Term) lv.getItemAtPosition(position));
+                viewCourse((Course) lv.getItemAtPosition(position));
             }
         });
         navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(context, drawerLayout));
@@ -60,25 +61,25 @@ public class AllTermActivity extends AppCompatActivity {
         });
     }
 
-    private void viewTerm(Term term) {
-        Intent intent = new Intent(context, ViewTermActivity.class);
-        intent.putExtra("Term", term);
+    private void viewCourse(Course course) {
+        Intent intent = new Intent(context, ViewCourseActivity.class);
+        intent.putExtra("CourseId", course.getId());
         startActivity(intent);
     }
 
     @Override
     protected void onResume() {
-        termData.open();
-        terms = termData.all();
+        courseData.open();
+        courses = courseData.all();
         adapter.clear();
-        adapter.addAll(terms);
+        adapter.addAll(courses);
         adapter.notifyDataSetChanged();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        termData.close();
+        courseData.close();
         super.onPause();
     }
 }
