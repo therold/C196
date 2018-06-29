@@ -41,13 +41,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/course"/>
-                        <EditText
-                            android:id="@+id/txtCourse"
+                        <Spinner
+                            android:id="@+id/cboCourse"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:clickable="true"
                             android:focusable="false"
-                            android:layout_column="1"/>
+                            android:prompt="@string/course"
+                            android:layout_column="1"
+                            android:layout_row="0" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

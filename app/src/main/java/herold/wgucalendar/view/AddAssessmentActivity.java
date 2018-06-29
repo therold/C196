@@ -5,24 +5,31 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.List;
+
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.AssessmentData;
+import herold.wgucalendar.data.CourseData;
 import herold.wgucalendar.model.Course;
 
 public class AddAssessmentActivity extends AppCompatActivity {
     private AssessmentData assessmentData;
     private Course course;
+    private CourseSpinnerAdapter adpCourse;
+    private CourseData courseData;
     private DrawerLayout drawerLayout;
-    private EditText txtCourse;
     private EditText txtTitle;
     private EditText txtDueDate;
+    private List<Course> courses;
     private NavigationView navigationView;
+    private Spinner cboCourse;
     private Spinner cboType;
     private Toolbar toolbar;
 
@@ -34,7 +41,7 @@ public class AddAssessmentActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nav_view);
-        txtCourse = findViewById(R.id.txtCourse);
+        cboCourse = findViewById(R.id.cboCourse);
         txtTitle = findViewById(R.id.txtTitle);
         txtDueDate = findViewById(R.id.txtDueDate);
         cboType = findViewById(R.id.cboType);
@@ -42,8 +49,18 @@ public class AddAssessmentActivity extends AppCompatActivity {
         ViewHelper.setupDateInput(this, txtDueDate);
         assessmentData = new AssessmentData(this);
         assessmentData.open();
+
         course = getIntent().getParcelableExtra("Course");
-        txtCourse.setText(course.getTitle());
+        courseData = new CourseData(this);
+        courseData.open();
+        courses = courseData.all();
+        adpCourse = new CourseSpinnerAdapter(this, android.R.layout.simple_spinner_item, courses);
+        cboCourse.setAdapter(adpCourse);
+        if (course != null) {
+            Log.v("HEROLDA", "ADD ASSESSMENT Course: " + course.getTitle());
+            Log.v("HEROLDA", "ADD ASSESSMENT Index: " + courses.indexOf(course));
+            cboCourse.setSelection(courses.indexOf(course));
+        }
 
         navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(this, drawerLayout));
 
@@ -73,7 +90,8 @@ public class AddAssessmentActivity extends AppCompatActivity {
         String title = txtTitle.getText().toString();
         String dueDate = txtDueDate.getText().toString();
         String type = cboType.getSelectedItem().toString();
-        assessmentData.createAssessment(title, type, dueDate, course.getId());
+        long courseId = ((Course) cboCourse.getSelectedItem()).getId();
+        assessmentData.createAssessment(title, type, dueDate, courseId);
         finish();
     }
 

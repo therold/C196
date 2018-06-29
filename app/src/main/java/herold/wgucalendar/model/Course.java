@@ -102,4 +102,14 @@ public class Course implements Parcelable {
     public String toString() {
         return title;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Course)) {
+            return false;
+        }
+
+        Course course = (Course) o;
+        return course.id == id;
+    }
 }

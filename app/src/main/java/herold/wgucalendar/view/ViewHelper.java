@@ -71,7 +71,7 @@ public class ViewHelper {
                 ViewHelper.switchToActivity(context, AddTermActivity.class);
                 break;
             case R.id.nav_add_assessment:
-                ViewHelper.switchToActivity(context, AddTermActivity.class);
+                ViewHelper.switchToActivity(context, AddAssessmentActivity.class);
                 break;
             case R.id.nav_all_assessment:
                 ViewHelper.switchToActivity(context, AllAssessmentActivity.class);
