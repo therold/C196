@@ -2,16 +2,15 @@ package herold.wgucalendar.view;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.CourseData;
@@ -29,7 +28,6 @@ public class AddCourseActivity extends AppCompatActivity {
     private EditText txtMentorPhone;
     private EditText txtMentorEmail;
     private EditText txtNotes;
-    private ImageView imgMenu;
     private NavigationView navigationView;
     private ScrollView scrollView;
     private Spinner cboStatus;
@@ -44,7 +42,6 @@ public class AddCourseActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nav_view);
-        imgMenu = findViewById(R.id.imgMenu);
         txtTerm = findViewById(R.id.txtTerm);
         txtTitle = findViewById(R.id.txtTitle);
         txtStartDate = findViewById(R.id.txtStartDate);
@@ -57,7 +54,6 @@ public class AddCourseActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         scrollView = findViewById(R.id.scrollView);
 
-        ViewHelper.setupToolbar(this, toolbar, R.string.add_course);
         ViewHelper.setupDateInput(this, txtStartDate);
         ViewHelper.setupDateInput(this, txtEndDate);
         courseData = new CourseData(this);
@@ -67,16 +63,27 @@ public class AddCourseActivity extends AppCompatActivity {
 
         txtNotes.setOnTouchListener(ViewHelper.scrollInsideScrollview(scrollView));
         navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(this, drawerLayout));
-        imgMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.START); }
-        });
 
-
+        Button btnSave = new Button(this);
+        btnSave.setText(R.string.save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { save(); }
+            public void onClick(View view) { save(); }
         });
+        btnSave.setLayoutParams(ViewHelper.rightLayout());
+        toolbar.addView(btnSave);
+
+        Button btnCancel = new Button(this);
+        btnCancel.setText(R.string.cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { cancel(); }
+        });
+        btnCancel.setLayoutParams(ViewHelper.leftLayout());
+        toolbar.addView(btnCancel);
+
+        TextView txtTitle = ViewHelper.getTitleText(this, R.string.add_course);
+        toolbar.addView(txtTitle);
     }
 
     private void save() {
@@ -91,6 +98,10 @@ public class AddCourseActivity extends AppCompatActivity {
         courseData.createCourse(title, startDate, endDate, status,
                 mentorName, mentorPhone, mentorEmail, notes, term.getId());
         setResult(ViewHelper.DATA_SET_CHANGED);
+        finish();
+    }
+
+    private void cancel() {
         finish();
     }
 

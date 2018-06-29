@@ -16,8 +16,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,12 +38,11 @@ public class ViewTermActivity extends AppCompatActivity {
     private EditText txtStartDate;
     private EditText txtEndDate;
     private ImageView imgMenu;
-    private LinearLayout cntLayout;
-    private LinearLayout buttonBar;
     private List<Course> courses;
     private List<View> inputs;
     private ListView lvCourses;
     private NavigationView navigationView;
+    private ScrollView scrollView;
     private String oTitle;
     private String oStart;
     private String oEnd;
@@ -64,9 +63,9 @@ public class ViewTermActivity extends AppCompatActivity {
         imgMenu = findViewById(R.id.imgMenu);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        cntLayout = findViewById(R.id.cntLayout);
         lblCourses = findViewById(R.id.lblCourses);
         toolbar = findViewById(R.id.toolbar);
+        scrollView = findViewById(R.id.scrollView);
         ViewHelper.setupToolbar(this, toolbar, R.string.view_term);
 
         inputs = new ArrayList<>();
@@ -94,6 +93,7 @@ public class ViewTermActivity extends AppCompatActivity {
             }
         };
         lvCourses.setOnItemClickListener(lvListener);
+        ViewHelper.setListViewHeight(lvCourses);
         NavigationView.OnNavigationItemSelectedListener navListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -118,6 +118,7 @@ public class ViewTermActivity extends AppCompatActivity {
             public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.END); }
         };
         imgMenu.setOnClickListener(imgMenuListener);
+        ViewHelper.scrollToTop(scrollView);
     }
 
     private void addCourse() {
@@ -174,23 +175,28 @@ public class ViewTermActivity extends AppCompatActivity {
         ViewHelper.setupDateInput(this, txtStartDate);
         ViewHelper.setupDateInput(this, txtEndDate);
 
-        buttonBar = new LinearLayout(context);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbar.removeAllViews();
         Button btnSave = new Button(context);
         btnSave.setText(R.string.save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { saveUpdate(); }
         });
+        btnSave.setLayoutParams(ViewHelper.rightLayout());
+        toolbar.addView(btnSave);
+
         Button btnCancel = new Button(context);
         btnCancel.setText(R.string.cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) { cancelUpdate(); }
         });
-        buttonBar.setOrientation(LinearLayout.HORIZONTAL);
-        buttonBar.addView(btnSave);
-        buttonBar.addView(btnCancel);
-        cntLayout.addView(buttonBar);
+        btnCancel.setLayoutParams(ViewHelper.leftLayout());
+        toolbar.addView(btnCancel);
+
+        TextView txtTitle = ViewHelper.getTitleText(this, R.string.edit_term);
+        toolbar.addView(txtTitle);
     }
 
     private void saveUpdate() {
@@ -203,6 +209,10 @@ public class ViewTermActivity extends AppCompatActivity {
     }
 
     private void cancelUpdate() {
+        toolbar.removeAllViews();
+        ViewHelper.setupToolbar(this, toolbar, R.string.view_term);
+        toolbar.addView(imgMenu);
+
         ViewHelper.disableInput(inputs);
         lblCourses.setVisibility(View.VISIBLE);
         lvCourses.setVisibility(View.VISIBLE);
@@ -210,13 +220,13 @@ public class ViewTermActivity extends AppCompatActivity {
         imgMenu.setVisibility(View.VISIBLE);
         txtStartDate.setOnClickListener(null);
         txtEndDate.setOnClickListener(null);
-        cntLayout.removeView(buttonBar);
 
         txtTermTitle.setText(oTitle);
         txtStartDate.setText(oStart);
         txtEndDate.setText(oEnd);
 
         ViewHelper.closeKeyboard(this);
+        ViewHelper.scrollToTop(scrollView);
     }
 
     @Override
@@ -226,6 +236,7 @@ public class ViewTermActivity extends AppCompatActivity {
         courses = courseData.findByTerm(term.getId());
         adapter.clear();
         adapter.addAll(courses);
+        adapter.notifyDataSetChanged();
         super.onResume();
     }
 

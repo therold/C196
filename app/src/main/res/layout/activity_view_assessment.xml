@@ -5,12 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -18,9 +13,7 @@
                 android:id="@+id/content_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/cntLayout"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical" >
@@ -40,75 +33,82 @@
                             android:layout_margin="10dp"
                             android:src="@drawable/ic_options" />
                     </android.support.v7.widget.Toolbar>
-                    <GridLayout
-                        android:id="@+id/gridview"
+                    <ScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:numColumns="auto_fit"
-                        android:verticalSpacing="10dp"
-                        android:horizontalSpacing="10dp"
-                        android:stretchMode="columnWidth"
-                        android:gravity="center">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/course"/>
-                        <Spinner
-                            android:id="@+id/cboCourse"
+                        android:id="@+id/scrollView">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
+                        <GridLayout
+                            android:id="@+id/gridview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:prompt="@string/course"
-                            android:layout_column="1"
-                            android:layout_row="0" />
+                            android:numColumns="auto_fit"
+                            android:verticalSpacing="10dp"
+                            android:horizontalSpacing="10dp"
+                            android:stretchMode="columnWidth"
+                            android:gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/course"/>
+                            <Spinner
+                                android:id="@+id/cboCourse"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:prompt="@string/course"
+                                android:layout_column="1"
+                                android:layout_row="0" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/title"
+                                android:layout_column="0"
+                                android:layout_row="1"/>
+                            <EditText
+                                android:id="@+id/txtTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:maxLines="1"
+                                android:inputType="text"
+                                android:layout_column="1"
+                                android:layout_row="1"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="0"
+                                android:layout_row="2"
+                                android:text="@string/due_date"/>
+                            <EditText
+                                android:id="@+id/txtDueDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:layout_column="1"
+                                android:layout_row="2"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="0"
+                                android:layout_row="3"
+                                android:text="@string/type"/>
+                            <Spinner
+                                android:id="@+id/cboType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:prompt="@string/type"
+                                android:entries="@array/type_array"
+                                android:layout_column="1"
+                                android:layout_row="3" />
+                        </GridLayout>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/title"
-                            android:layout_column="0"
-                            android:layout_row="1"/>
-                        <EditText
-                            android:id="@+id/txtTitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:maxLines="1"
-                            android:inputType="text"
-                            android:layout_column="1"
-                            android:layout_row="1"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_column="0"
-                            android:layout_row="2"
-                            android:text="@string/due_date"/>
-                        <EditText
-                            android:id="@+id/txtDueDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:layout_column="1"
-                            android:layout_row="2"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_column="0"
-                            android:layout_row="3"
-                            android:text="@string/type"/>
-                        <Spinner
-                            android:id="@+id/cboType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:prompt="@string/type"
-                            android:entries="@array/type_array"
-                            android:layout_column="1"
-                            android:layout_row="3" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_column="0"
-                            android:layout_row="4"
                             android:text="@string/notes"/>
                         <EditText
                             android:id="@+id/txtNotes"
@@ -121,14 +121,12 @@
                             android:minLines="5"
                             android:overScrollMode="always"
                             android:scrollbarStyle="insideInset"
-                            android:scrollbars="vertical"
-                            android:layout_column="1"
-                            android:layout_row="4"/>
-                    </GridLayout>
-                </LinearLayout>
-            </FrameLayout>
-        </RelativeLayout>
-    </ScrollView>
+                            android:scrollbars="vertical"/>
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

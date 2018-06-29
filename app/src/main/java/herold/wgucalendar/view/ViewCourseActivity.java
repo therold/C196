@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -49,8 +48,6 @@ public class ViewCourseActivity extends AppCompatActivity {
     private EditText txtMentorEmail;
     private EditText txtNotes;
     private ImageView imgMenu;
-    private LinearLayout cntLayout;
-    private LinearLayout buttonBar;
     private List<Assessment> assessments;
     private List<Term> terms;
     private List<View> inputs;
@@ -93,7 +90,6 @@ public class ViewCourseActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
         imgMenu = findViewById(R.id.imgMenu);
-        cntLayout = findViewById(R.id.cntLayout);
         toolbar = findViewById(R.id.toolbar);
         scrollView = findViewById(R.id.scrollView);
         ViewHelper.setupToolbar(this, toolbar, R.string.view_course);
@@ -126,7 +122,7 @@ public class ViewCourseActivity extends AppCompatActivity {
             }
         };
         lvAssessments.setOnItemClickListener(lvListener);
-
+        ViewHelper.setListViewHeight(lvAssessments);
         NavigationView.OnNavigationItemSelectedListener navListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -151,7 +147,9 @@ public class ViewCourseActivity extends AppCompatActivity {
             public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.END); }
         };
         imgMenu.setOnClickListener(menuClickListener);
+        ViewHelper.scrollToTop(scrollView);
     }
+
 
     private void addAssessment() {
         Intent intent = new Intent(context, AddAssessmentActivity.class);
@@ -215,23 +213,28 @@ public class ViewCourseActivity extends AppCompatActivity {
         ViewHelper.setupDateInput(this, txtStartDate);
         ViewHelper.setupDateInput(this, txtEndDate);
 
-        buttonBar = new LinearLayout(context);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbar.removeAllViews();
         Button btnSave = new Button(context);
         btnSave.setText(R.string.save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { saveUpdate(); }
         });
+        btnSave.setLayoutParams(ViewHelper.rightLayout());
+        toolbar.addView(btnSave);
+
         Button btnCancel = new Button(context);
         btnCancel.setText(R.string.cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { cancelUpdate(); }
         });
-        buttonBar.setOrientation(LinearLayout.HORIZONTAL);
-        buttonBar.addView(btnSave);
-        buttonBar.addView(btnCancel);
-        cntLayout.addView(buttonBar);
+        btnCancel.setLayoutParams(ViewHelper.leftLayout());
+        toolbar.addView(btnCancel);
+
+        TextView txtTitle = ViewHelper.getTitleText(this, R.string.edit_course);
+        toolbar.addView(txtTitle);
     }
 
     private void saveUpdate() {
@@ -249,6 +252,10 @@ public class ViewCourseActivity extends AppCompatActivity {
     }
 
     private void cancelUpdate() {
+        toolbar.removeAllViews();
+        ViewHelper.setupToolbar(this, toolbar, R.string.view_course);
+        toolbar.addView(imgMenu);
+
         ViewHelper.disableInput(inputs);
         lblAssessment.setVisibility(View.VISIBLE);
         lvAssessments.setVisibility(View.VISIBLE);
@@ -256,7 +263,6 @@ public class ViewCourseActivity extends AppCompatActivity {
         imgMenu.setVisibility(View.VISIBLE);
         txtStartDate.setOnClickListener(null);
         txtEndDate.setOnClickListener(null);
-        cntLayout.removeView(buttonBar);
 
         cboTerm.setSelection(terms.indexOf(oTerm));
         txtTitle.setText(oTitle);
@@ -268,6 +274,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         txtMentorEmail.setText(oMentorEmail);
         txtNotes.setText(oNotes);
         ViewHelper.closeKeyboard(this);
+        ViewHelper.scrollToTop(scrollView);
     }
 
     private void loadData() {
@@ -284,7 +291,7 @@ public class ViewCourseActivity extends AppCompatActivity {
 
         termData.open();
         term = termData.get(course.getTermId());
-        List<Term> terms = termData.all();
+        terms = termData.all();
         adpTerm = new TermSpinnerAdapter(this, android.R.layout.simple_spinner_item, terms);
         cboTerm.setAdapter(adpTerm);
         cboTerm.setSelection(terms.indexOf(term));
@@ -298,6 +305,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         loadData();
+        ViewHelper.scrollToTop(scrollView);
         super.onResume();
     }
 

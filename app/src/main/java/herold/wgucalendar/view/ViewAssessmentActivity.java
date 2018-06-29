@@ -14,9 +14,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,6 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     private EditText txtDueDate;
     private EditText txtNotes;
     private ImageView imgMenu;
-    private LinearLayout cntLayout;
-    private LinearLayout buttonBar;
     private List<Course> courses;
     private List<View> inputs;
     private long courseId;
@@ -69,7 +67,6 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         scrollView = findViewById(R.id.scrollView);
         imgMenu = findViewById(R.id.imgMenu);
-        cntLayout = findViewById(R.id.cntLayout);
         toolbar = findViewById(R.id.toolbar);
         ViewHelper.setupToolbar(this, toolbar, R.string.view_assessment);
 
@@ -85,7 +82,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         courseData.open();
         courseId = getIntent().getLongExtra("CourseId", 0);
         course = courseData.get(courseId);
-        List<Course> courses = courseData.all();
+        courses = courseData.all();
         adpCourse = new CourseSpinnerAdapter(this, android.R.layout.simple_spinner_item, courses);
         cboCourse.setAdapter(adpCourse);
         cboCourse.setSelection(courses.indexOf(course));
@@ -153,23 +150,28 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         imgMenu.setVisibility(View.GONE);
         ViewHelper.setupDateInput(this, txtDueDate);
 
-        buttonBar = new LinearLayout(context);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbar.removeAllViews();
         Button btnSave = new Button(context);
         btnSave.setText(R.string.save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { saveUpdate(); }
         });
+        btnSave.setLayoutParams(ViewHelper.rightLayout());
+        toolbar.addView(btnSave);
+
         Button btnCancel = new Button(context);
         btnCancel.setText(R.string.cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { cancelUpdate(); }
         });
-        buttonBar.setOrientation(LinearLayout.HORIZONTAL);
-        buttonBar.addView(btnSave);
-        buttonBar.addView(btnCancel);
-        cntLayout.addView(buttonBar);
+        btnCancel.setLayoutParams(ViewHelper.leftLayout());
+        toolbar.addView(btnCancel);
+
+        TextView txtTitle = ViewHelper.getTitleText(this, R.string.edit_assessment);
+        toolbar.addView(txtTitle);
     }
 
     private void saveUpdate() {
@@ -184,11 +186,14 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     }
 
     private void cancelUpdate() {
+        toolbar.removeAllViews();
+        ViewHelper.setupToolbar(this, toolbar, R.string.view_assessment);
+        toolbar.addView(imgMenu);
+
         ViewHelper.disableInput(inputs);
         imgMenu.setEnabled(true);
         imgMenu.setVisibility(View.VISIBLE);
         txtDueDate.setOnClickListener(null);
-        cntLayout.removeView(buttonBar);
 
         cboCourse.setSelection(courses.indexOf(oCourse));
         txtTitle.setText(oTitle);

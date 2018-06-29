@@ -4,20 +4,26 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -60,9 +66,46 @@ public class ViewHelper {
 
     public static void setupToolbar(AppCompatActivity activity, Toolbar toolbar, int title) {
         activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setTitle(title);
+        TextView txtTitle = getTitleText(activity, title);
+        toolbar.addView(txtTitle);
         ActionBar actionbar = activity.getSupportActionBar();
+        actionbar.setDisplayShowTitleEnabled(false);
         actionbar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    public static Toolbar.LayoutParams centerLayout() {
+        Toolbar.LayoutParams layout = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        layout.gravity = Gravity.CENTER;
+        return layout;
+    }
+
+    public static Toolbar.LayoutParams leftLayout() {
+        Toolbar.LayoutParams layout = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        layout.gravity = Gravity.START;
+        return layout;
+    }
+
+    public static Toolbar.LayoutParams rightLayout() {
+        Toolbar.LayoutParams layout = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        layout.gravity = Gravity.END;
+        return layout;
+    }
+
+    public static TextView getTitleText(Activity activity, int title) {
+        TextView txtTitle = new TextView(activity);
+        txtTitle.setTextSize(18);
+        txtTitle.setTextColor(Color.BLACK);
+        txtTitle.setLayoutParams(centerLayout());
+        txtTitle.setText(title);
+        return txtTitle;
+    }
+
+    public static void scrollToTop(final ScrollView scrollView) {
+        scrollView.post(new Runnable() {
+            public void run() {
+                scrollView.scrollTo(0, 0);
+            }
+        });
     }
 
     public static void closeKeyboard(Activity activity) {
@@ -146,5 +189,20 @@ public class ViewHelper {
                 input.setEnabled(false);
             }
         }
+    }
+
+    public static void setListViewHeight(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 }
