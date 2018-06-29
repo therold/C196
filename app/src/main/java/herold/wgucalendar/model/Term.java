@@ -64,4 +64,14 @@ public class Term implements Parcelable {
     public String toString() {
         return title;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Term)) {
+            return false;
+        }
+
+        Term term = (Term) o;
+        return term.id == id;
+    }
 }

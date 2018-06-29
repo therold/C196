@@ -28,8 +28,10 @@ import java.util.List;
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.AssessmentData;
 import herold.wgucalendar.data.CourseData;
+import herold.wgucalendar.data.TermData;
 import herold.wgucalendar.model.Assessment;
 import herold.wgucalendar.model.Course;
+import herold.wgucalendar.model.Term;
 
 public class ViewCourseActivity extends AppCompatActivity {
     private AssessmentAdapter adapter;
@@ -39,7 +41,6 @@ public class ViewCourseActivity extends AppCompatActivity {
     private CourseData courseData;
     private long courseId;
     private DrawerLayout drawerLayout;
-    private EditText txtTerm;
     private EditText txtTitle;
     private EditText txtStartDate;
     private EditText txtEndDate;
@@ -56,6 +57,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private ScrollView scrollView;
     private Spinner cboStatus;
+    private Spinner cboTerm;
     private String oTerm;
     private String oTitle;
     private String oStart;
@@ -65,6 +67,9 @@ public class ViewCourseActivity extends AppCompatActivity {
     private String oMentorPhone;
     private String oMentorEmail;
     private String oNotes;
+    private Term term;
+    private TermData termData;
+    private TermSpinnerAdapter adpTerm;
     private TextView lblAssessment;
     private Toolbar toolbar;
 
@@ -76,7 +81,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         lvAssessments = findViewById(R.id.lvAssessments);
         lblAssessment = findViewById(R.id.lblAssessment);
         cboStatus = findViewById(R.id.cboStatus);
-        txtTerm = findViewById(R.id.txtTerm);
+        cboTerm = findViewById(R.id.cboTerm);
         txtTitle = findViewById(R.id.txtTitle);
         txtStartDate = findViewById(R.id.txtTermStartDate);
         txtEndDate = findViewById(R.id.txtTermEndDate);
@@ -95,7 +100,7 @@ public class ViewCourseActivity extends AppCompatActivity {
 
         inputs = new ArrayList<>();
         inputs.add(cboStatus);
-        inputs.add(txtTerm);
+        inputs.add(cboTerm);
         inputs.add(txtTitle);
         inputs.add(txtStartDate);
         inputs.add(txtEndDate);
@@ -105,6 +110,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         inputs.add(txtNotes);
         ViewHelper.disableInput(inputs);
 
+        termData = new TermData(this);
         courseData = new CourseData(this);
         assessmentData = new AssessmentData(this);
         courseId = getIntent().getLongExtra("CourseId", 0);
@@ -186,7 +192,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     }
 
     private void editCourse() {
-        oTerm = txtTerm.getText().toString();
+        oTerm = cboTerm.getSelectedItem().toString();
         oTitle = txtTitle.getText().toString();
         oStart = txtStartDate.getText().toString();
         oEnd = txtEndDate.getText().toString();
@@ -228,6 +234,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     }
 
     private void saveUpdate() {
+        course.setTermId(((Term) cboTerm.getSelectedItem()).getId());
         course.setTitle(txtTitle.getText().toString());
         course.setStart(txtStartDate.getText().toString());
         course.setEnd(txtEndDate.getText().toString());
@@ -237,7 +244,6 @@ public class ViewCourseActivity extends AppCompatActivity {
         course.setMentorEmail(txtMentorEmail.getText().toString());
         course.setNotes(txtNotes.getText().toString());
         courseData.updateCourse(course);
-        setResult(ViewHelper.DATA_SET_CHANGED);
         finish();
     }
 
@@ -251,7 +257,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         txtEndDate.setOnClickListener(null);
         cntLayout.removeView(buttonBar);
 
-        txtTerm.setText(oTerm);
+        cboTerm.setSelection(getIndex(cboTerm, oTerm));
         txtTitle.setText(oTitle);
         txtStartDate.setText(oStart);
         txtEndDate.setText(oEnd);
@@ -267,7 +273,6 @@ public class ViewCourseActivity extends AppCompatActivity {
         courseData.open();
         course = courseData.get(courseId);
         cboStatus.setSelection(getIndex(cboStatus, course.getStatus()));
-        txtTerm.setText(Long.toString(course.getTermId()));
         txtTitle.setText(course.getTitle());
         txtStartDate.setText(course.getStart());
         txtEndDate.setText(course.getEnd());
@@ -275,6 +280,13 @@ public class ViewCourseActivity extends AppCompatActivity {
         txtMentorPhone.setText(course.getMentorPhone());
         txtMentorEmail.setText(course.getMentorEmail());
         txtNotes.setText(course.getNotes());
+
+        termData.open();
+        term = termData.get(course.getTermId());
+        List<Term> terms = termData.all();
+        adpTerm = new TermSpinnerAdapter(this, android.R.layout.simple_spinner_item, terms);
+        cboTerm.setAdapter(adpTerm);
+        cboTerm.setSelection(terms.indexOf(term));
 
         assessmentData.open();
         assessments = assessmentData.findByCourse(course.getId());
@@ -290,6 +302,7 @@ public class ViewCourseActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        termData.close();
         courseData.close();
         assessmentData.close();
         super.onPause();

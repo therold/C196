@@ -56,6 +56,15 @@ public class TermData {
         database.delete(TABLE, COLUMN_ID + " = " + id,null);
     }
 
+    public Term get(long id) {
+        Cursor cursor = database.query(TABLE, allColumns,
+                COLUMN_ID + " = " + id, null, null, null, null);
+        cursor.moveToFirst();
+        Term term = cursorToTerm(cursor);
+        cursor.close();
+        return term;
+    }
+
     public List<Term> all() {
         List<Term> terms = new ArrayList<>();
         Cursor cursor = database.query(TABLE, allColumns,
