@@ -28,8 +28,8 @@ public class TermAdapter extends ArrayAdapter<Term> {
         TextView txtStart = convertView.findViewById(R.id.txtStart);
         TextView txtEnd =  convertView.findViewById(R.id.txtEnd);
         txtTitle.setText(term.getTitle());
-        txtStart.setText(term.getStart());
-        txtEnd.setText(term.getEnd());
+        txtStart.setText(term.getStartDisplay());
+        txtEnd.setText(term.getEndDisplay());
         return convertView;
     }
 }

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import herold.wgucalendar.R;
+import herold.wgucalendar.data.DBHelper;
 import herold.wgucalendar.data.TermData;
 
 public class AddTermActivity extends AppCompatActivity {
@@ -67,8 +68,8 @@ public class AddTermActivity extends AppCompatActivity {
 
     private void save() {
         String title = txtTitle.getText().toString();
-        String startDate = txtStartDate.getText().toString();
-        String endDate = txtEndDate.getText().toString();
+        long startDate = DBHelper.stringToTimestamp(txtStartDate.getText().toString());
+        long endDate = DBHelper.stringToTimestamp(txtEndDate.getText().toString());
         termData.createTerm(title, startDate, endDate);
         finish();
     }

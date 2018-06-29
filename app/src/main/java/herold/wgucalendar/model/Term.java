@@ -3,25 +3,29 @@ package herold.wgucalendar.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import herold.wgucalendar.data.DBHelper;
+
 public class Term implements Parcelable {
     private long id;
     private String title;
-    private String start;
-    private String end;
+    private long start;
+    private long end;
 
     public long getId() { return id; }
     public String getTitle() { return title; }
-    public String getStart() { return start; }
-    public String getEnd() { return end; }
+    public long getStart() { return start; }
+    public long getEnd() { return end; }
+    public String getStartDisplay() { return DBHelper.timestampToString(start); }
+    public String getEndDisplay() { return DBHelper.timestampToString(end); }
 
     public void setId(long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
-    public void setStart(String start) { this.start = start; }
-    public void setEnd(String end) { this.end = end; }
+    public void setStart(long start) { this.start = start; }
+    public void setEnd(long end) { this.end = end; }
 
     public Term() {}
 
-    public Term(long id, String title, String start, String end) {
+    public Term(long id, String title, long start, long end) {
         this.id = id;
         this.title = title;
         this.start = start;
@@ -31,8 +35,8 @@ public class Term implements Parcelable {
     public Term(Parcel source) {
         id = source.readLong();
         title = source.readString();
-        start = source.readString();
-        end = source.readString();
+        start = source.readLong();
+        end = source.readLong();
     }
 
     @Override
@@ -44,8 +48,8 @@ public class Term implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(title);
-        dest.writeString(start);
-        dest.writeString(end);
+        dest.writeLong(start);
+        dest.writeLong(end);
     }
 
     public static final Creator<Term> CREATOR = new Creator<Term>() {

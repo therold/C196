@@ -3,17 +3,23 @@ package herold.wgucalendar.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE = "wgu.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_CREATE_TERM = "CREATE TABLE "
             + TermData.TABLE + "( "
             + TermData.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TermData.COLUMN_TITLE + " TEXT NOT NULL, "
-            + TermData.COLUMN_START_DATE + " TEXT NOT NULL, "
-            + TermData.COLUMN_END_DATE + " TEXT NOT NULL);";
+            + TermData.COLUMN_START_DATE + " INTEGER NOT NULL, "
+            + TermData.COLUMN_END_DATE + " INTEGER NOT NULL);";
     private static final String DATABASE_CREATE_COURSE = "CREATE TABLE "
             + CourseData.TABLE + "( "
             + CourseData.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -24,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
             + CourseData.COLUMN_MENTOR_NAME + " TEXT NOT NULL, "
             + CourseData.COLUMN_MENTOR_PHONE + " TEXT NOT NULL, "
             + CourseData.COLUMN_MENTOR_EMAIL + " TEXT NOT NULL, "
-            + CourseData.COLUMN_NOTES  + " TEXT NOT NULL, "
+            + CourseData.COLUMN_NOTES  + " TEXT, "
             + CourseData.COLUMN_TERM_ID + " INTEGER NOT NULL, "
             + " FOREIGN KEY (" + CourseData.COLUMN_TERM_ID + ")  REFERENCES "
                 + TermData.TABLE + " (" + TermData.COLUMN_ID + "));";
@@ -53,5 +59,22 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + CourseData.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + AssessmentData.TABLE);
         onCreate(db);
+    }
+
+    public static long stringToTimestamp(String date) {
+        String isoDate = "20" + date.substring(6, 8) + "-" + date.substring(0, 2)
+                + "-" + date.substring(3, 5) + " 00:00:00";
+        Log.v("test", isoDate);
+        Timestamp timestamp = Timestamp.valueOf(isoDate);
+        return timestamp.getTime();
+    }
+
+    public static String timestampToString(long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        calendar.setTimeInMillis(timestamp);
+        String date = sdf.format(calendar.getTime());
+        return date;
     }
 }

@@ -25,6 +25,7 @@ import java.util.List;
 
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.CourseData;
+import herold.wgucalendar.data.DBHelper;
 import herold.wgucalendar.data.TermData;
 import herold.wgucalendar.model.Course;
 import herold.wgucalendar.model.Term;
@@ -78,8 +79,8 @@ public class ViewTermActivity extends AppCompatActivity {
         termData.open();
         term = getIntent().getParcelableExtra("Term");
         txtTermTitle.setText(term.getTitle());
-        txtStartDate.setText(term.getStart());
-        txtEndDate.setText(term.getEnd());
+        txtStartDate.setText(term.getStartDisplay());
+        txtEndDate.setText(term.getEndDisplay());
 
         courseData = new CourseData(this);
         courseData.open();
@@ -201,8 +202,8 @@ public class ViewTermActivity extends AppCompatActivity {
 
     private void saveUpdate() {
         term.setTitle(txtTermTitle.getText().toString());
-        term.setStart(txtStartDate.getText().toString());
-        term.setEnd(txtEndDate.getText().toString());
+        term.setStart(DBHelper.stringToTimestamp(txtStartDate.getText().toString()));
+        term.setEnd(DBHelper.stringToTimestamp(txtEndDate.getText().toString()));
         termData.updateTerm(term);
         setResult(ViewHelper.DATA_SET_CHANGED);
         finish();

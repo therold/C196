@@ -6,8 +6,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import herold.wgucalendar.model.Term;
 
@@ -28,7 +31,7 @@ public class TermData {
 
     public void close() { dbHelper.close(); }
 
-    public Term createTerm(String title, String startDate, String endDate) {
+    public Term createTerm(String title, long startDate, long endDate) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_START_DATE, startDate);
@@ -65,6 +68,23 @@ public class TermData {
         return term;
     }
 
+    public Term getCurrent() {
+        Calendar calendar = Calendar.getInstance();
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        String today = sdf.format(calendar.getTime());
+
+        Cursor cursor = database.query(TABLE, allColumns,
+                null, null, null, null, null);
+        cursor.moveToFirst();
+        Term term = null;
+        if (cursor!=null && cursor.getCount()>0) {
+            term = cursorToTerm(cursor);
+        }
+        cursor.close();
+        return term;
+    }
+
     public List<Term> all() {
         List<Term> terms = new ArrayList<>();
         Cursor cursor = database.query(TABLE, allColumns,
@@ -83,8 +103,8 @@ public class TermData {
         Term term = new Term();
         term.setId(cursor.getLong(0));
         term.setTitle(cursor.getString(1));
-        term.setStart(cursor.getString(2));
-        term.setEnd(cursor.getString(3));
+        term.setStart(cursor.getLong(2));
+        term.setEnd(cursor.getLong(3));
         return term;
     }
 }

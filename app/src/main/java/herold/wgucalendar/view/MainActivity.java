@@ -7,10 +7,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import herold.wgucalendar.R;
+import herold.wgucalendar.data.TermData;
+import herold.wgucalendar.model.Term;
 
 public class MainActivity extends AppCompatActivity {
     private Context context = this;
@@ -36,5 +39,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.START); }
         });
+
+        TermData termData = new TermData(this);
+        termData.open();
+        Term term = termData.getCurrent();
+        if(term != null){
+            Log.v("HEROLDA", "CURRENT: " + term.getStart() + " - " + term.getEnd());
+            Log.v("test main", "TS: " + term.getStart());
+        }
+
     }
 }
