@@ -300,12 +300,14 @@ public class ViewCourseActivity extends AppCompatActivity {
         assessments = assessmentData.findByCourse(course.getId());
         adapter.clear();
         adapter.addAll(assessments);
+
         adapter.notifyDataSetChanged();
     }
 
     @Override
     protected void onResume() {
         loadData();
+        ViewHelper.setListViewHeight(lvAssessments);
         ViewHelper.scrollToTop(scrollView);
         super.onResume();
     }

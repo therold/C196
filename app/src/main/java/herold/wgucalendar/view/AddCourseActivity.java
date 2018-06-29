@@ -12,15 +12,17 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.List;
+
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.CourseData;
+import herold.wgucalendar.data.TermData;
 import herold.wgucalendar.model.Term;
 
 public class AddCourseActivity extends AppCompatActivity {
     private Button btnSave;
     private CourseData courseData;
     private DrawerLayout drawerLayout;
-    private EditText txtTerm;
     private EditText txtTitle;
     private EditText txtStartDate;
     private EditText txtEndDate;
@@ -28,10 +30,14 @@ public class AddCourseActivity extends AppCompatActivity {
     private EditText txtMentorPhone;
     private EditText txtMentorEmail;
     private EditText txtNotes;
+    private List<Term> terms;
     private NavigationView navigationView;
     private ScrollView scrollView;
     private Spinner cboStatus;
+    private Spinner cboTerm;
     private Term term;
+    private TermData termData;
+    private TermSpinnerAdapter adpTerm;
     private Toolbar toolbar;
 
     @Override
@@ -42,7 +48,7 @@ public class AddCourseActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         toolbar = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.nav_view);
-        txtTerm = findViewById(R.id.txtTerm);
+        cboTerm = findViewById(R.id.cboTerm);
         txtTitle = findViewById(R.id.txtTitle);
         txtStartDate = findViewById(R.id.txtStartDate);
         txtEndDate = findViewById(R.id.txtEndDate);
@@ -58,8 +64,17 @@ public class AddCourseActivity extends AppCompatActivity {
         ViewHelper.setupDateInput(this, txtEndDate);
         courseData = new CourseData(this);
         courseData.open();
+
+
         term = getIntent().getParcelableExtra("Term");
-        txtTerm.setText(term.getTitle());
+        termData = new TermData(this);
+        termData.open();
+        terms = termData.all();
+        adpTerm = new TermSpinnerAdapter(this, android.R.layout.simple_spinner_item, terms);
+        cboTerm.setAdapter(adpTerm);
+        if (term != null) {
+            cboTerm.setSelection(terms.indexOf(term));
+        }
 
         txtNotes.setOnTouchListener(ViewHelper.scrollInsideScrollview(scrollView));
         navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(this, drawerLayout));
@@ -95,8 +110,9 @@ public class AddCourseActivity extends AppCompatActivity {
         String mentorPhone = txtMentorPhone.getText().toString();
         String mentorEmail = txtMentorEmail.getText().toString();
         String notes = txtNotes.getText().toString();
+        long termId = ((Term) cboTerm.getSelectedItem()).getId();
         courseData.createCourse(title, startDate, endDate, status,
-                mentorName, mentorPhone, mentorEmail, notes, term.getId());
+                mentorName, mentorPhone, mentorEmail, notes, termId);
         setResult(ViewHelper.DATA_SET_CHANGED);
         finish();
     }
@@ -108,12 +124,14 @@ public class AddCourseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         courseData.open();
+        termData.open();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
         courseData.close();
+        termData.close();
         super.onPause();
     }
 }

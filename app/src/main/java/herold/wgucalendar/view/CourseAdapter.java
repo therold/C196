@@ -13,6 +13,7 @@ import herold.wgucalendar.R;
 import herold.wgucalendar.model.Course;
 
 public class CourseAdapter extends ArrayAdapter<Course> {
+
     public CourseAdapter(Context context, List<Course> courses) {
         super(context, 0, courses);
     }

@@ -237,6 +237,8 @@ public class ViewTermActivity extends AppCompatActivity {
         adapter.clear();
         adapter.addAll(courses);
         adapter.notifyDataSetChanged();
+        ViewHelper.setListViewHeight(lvCourses);
+        ViewHelper.scrollToTop(scrollView);
         super.onResume();
     }
 
