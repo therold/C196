@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import herold.wgucalendar.model.Course;
@@ -85,6 +86,22 @@ public class CourseData {
         Course course = cursorToCourse(cursor);
         cursor.close();
         return course;
+    }
+
+    public List<Course> getCurrent() {
+        long now = Calendar.getInstance().getTimeInMillis();
+
+        Cursor cursor = database.query(TABLE, allColumns,
+                COLUMN_START_DATE + " <= " + now + " AND " + COLUMN_END_DATE + " >= " + now, null, null, null, null);
+        cursor.moveToFirst();
+        List<Course> courses = new ArrayList<>();
+        while(!cursor.isAfterLast()) {
+            Course course = cursorToCourse(cursor);
+            courses.add(course);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return courses;
     }
 
     public List<Course> all() {

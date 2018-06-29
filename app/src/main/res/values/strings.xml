@@ -42,6 +42,11 @@
     <string name="view_course_by_term">View Courses by Term</string>
     <string name="view_assessment_by_course">View Assessments by Course</string>
     <string name="view_notifications">View Notifications</string>
+    <string name="current_course">Current Courses</string>
+    <string name="no_current_course">"No Current Course!"</string>
+    <string name="current_term">Current Term</string>
+    <string name="no_current_term">No Current Term!</string>
+
 
     <string-array name="status_array">
         <item>Plan to Take</item>
