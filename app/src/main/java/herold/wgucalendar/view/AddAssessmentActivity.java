@@ -5,7 +5,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,8 +56,6 @@ public class AddAssessmentActivity extends AppCompatActivity {
         adpCourse = new CourseSpinnerAdapter(this, android.R.layout.simple_spinner_item, courses);
         cboCourse.setAdapter(adpCourse);
         if (course != null) {
-            Log.v("HEROLDA", "ADD ASSESSMENT Course: " + course.getTitle());
-            Log.v("HEROLDA", "ADD ASSESSMENT Index: " + courses.indexOf(course));
             cboCourse.setSelection(courses.indexOf(course));
         }
 

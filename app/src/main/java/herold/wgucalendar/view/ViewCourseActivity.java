@@ -160,7 +160,6 @@ public class ViewCourseActivity extends AppCompatActivity {
     private void viewAssessment(Assessment assessment) {
         Intent intent = new Intent(context, ViewAssessmentActivity.class);
         intent.putExtra("Assessment", assessment);
-        intent.putExtra("CourseId", course.getId());
         startActivity(intent);
     }
 

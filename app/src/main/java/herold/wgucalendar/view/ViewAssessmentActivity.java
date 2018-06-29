@@ -78,17 +78,16 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         inputs.add(txtNotes);
         ViewHelper.disableInput(inputs);
 
+        assessment = getIntent().getParcelableExtra("Assessment");
+        assessmentData = new AssessmentData(this);
+        assessmentData.open();
         courseData = new CourseData(this);
         courseData.open();
-        courseId = getIntent().getLongExtra("CourseId", 0);
-        course = courseData.get(courseId);
+        course = courseData.get(assessment.getCourseId());
         courses = courseData.all();
         adpCourse = new CourseSpinnerAdapter(this, android.R.layout.simple_spinner_item, courses);
         cboCourse.setAdapter(adpCourse);
         cboCourse.setSelection(courses.indexOf(course));
-        assessment = getIntent().getParcelableExtra("Assessment");
-        assessmentData = new AssessmentData(this);
-        assessmentData.open();
 
         cboType.setSelection(getIndex(cboType, assessment.getType()));
         txtTitle.setText(assessment.getTitle());
