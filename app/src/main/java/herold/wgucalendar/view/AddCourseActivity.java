@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 
 import herold.wgucalendar.R;
@@ -30,6 +31,7 @@ public class AddCourseActivity extends AppCompatActivity {
     private EditText txtNotes;
     private ImageView imgMenu;
     private NavigationView navigationView;
+    private ScrollView scrollView;
     private Spinner cboStatus;
     private Term term;
     private Toolbar toolbar;
@@ -53,6 +55,7 @@ public class AddCourseActivity extends AppCompatActivity {
         txtMentorEmail = findViewById(R.id.txtMentorEmail);
         txtNotes = findViewById(R.id.txtNotes);
         btnSave = findViewById(R.id.btnSave);
+        scrollView = findViewById(R.id.scrollView);
 
         ViewHelper.setupToolbar(this, toolbar, R.string.add_course);
         ViewHelper.setupDateInput(this, txtStartDate);
@@ -62,6 +65,7 @@ public class AddCourseActivity extends AppCompatActivity {
         term = getIntent().getParcelableExtra("Term");
         txtTerm.setText(term.getTitle());
 
+        txtNotes.setOnTouchListener(ViewHelper.scrollInsideScrollview(scrollView));
         navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(this, drawerLayout));
         imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override

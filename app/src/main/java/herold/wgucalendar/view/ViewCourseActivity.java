@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -53,6 +54,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     private List<View> inputs;
     private ListView lvAssessments;
     private NavigationView navigationView;
+    private ScrollView scrollView;
     private Spinner cboStatus;
     private String oTerm;
     private String oTitle;
@@ -87,7 +89,9 @@ public class ViewCourseActivity extends AppCompatActivity {
         imgMenu = findViewById(R.id.imgMenu);
         cntLayout = findViewById(R.id.cntLayout);
         toolbar = findViewById(R.id.toolbar);
+        scrollView = findViewById(R.id.scrollView);
         ViewHelper.setupToolbar(this, toolbar, R.string.view_course);
+        txtNotes.setOnTouchListener(ViewHelper.scrollInsideScrollview(scrollView));
 
         inputs = new ArrayList<>();
         inputs.add(cboStatus);
@@ -99,7 +103,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         inputs.add(txtMentorPhone);
         inputs.add(txtMentorEmail);
         inputs.add(txtNotes);
-        for(View input : inputs) { input.setEnabled(false); }
+        ViewHelper.disableInput(inputs);
 
         courseData = new CourseData(this);
         assessmentData = new AssessmentData(this);
@@ -192,9 +196,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         oMentorEmail = txtMentorPhone.getText().toString();
         oNotes = txtNotes.getText().toString();
 
-        for(View input : inputs) { input.setEnabled(true); }
-        for(View input : inputs) { input.setFocusable(true); }
-        for(View input : inputs) { input.setFocusableInTouchMode(true); }
+        ViewHelper.enableInput(inputs);
         txtStartDate.setFocusableInTouchMode(false);
         txtEndDate.setFocusableInTouchMode(false);
         txtStartDate.setFocusable(false);
@@ -240,9 +242,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     }
 
     private void cancelUpdate() {
-        for(View input : inputs) { input.setEnabled(false); }
-        for(View input : inputs) { input.setFocusable(false); }
-        for(View input : inputs) { input.setFocusableInTouchMode(false); }
+        ViewHelper.disableInput(inputs);
         lblAssessment.setVisibility(View.VISIBLE);
         lvAssessments.setVisibility(View.VISIBLE);
         imgMenu.setEnabled(true);

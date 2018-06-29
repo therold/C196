@@ -5,42 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <RelativeLayout
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <FrameLayout
-                android:id="@+id/content_frame"
+            android:layout_height="match_parent">
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="top">
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_gravity="top">
-                    <android.support.v7.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:background="?attr/colorPrimary"
-                        android:elevation="4dp"
-                        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-                        <ImageView
-                            android:id="@+id/imgMenu"
-                            android:layout_height="match_parent"
-                            android:layout_width="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="end"
-                            android:layout_margin="10dp"
-                            android:src="@drawable/ic_menu" />
-                    </android.support.v7.widget.Toolbar>
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    android:elevation="4dp"
+                    android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+                    <ImageView
+                        android:id="@+id/imgMenu"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="end"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_menu" />
+                </android.support.v7.widget.Toolbar>
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scrollView"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
                     <GridLayout
                         android:id="@+id/gridview"
                         android:layout_width="match_parent"
@@ -165,18 +164,25 @@
                             android:id="@+id/txtNotes"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:lines="5"
+                            android:maxLines="5"
+                            android:minLines="5"
+                            android:overScrollMode="always"
+                            android:scrollbarStyle="insideInset"
+                            android:scrollbars="vertical"
                             android:layout_column="1"
                             android:layout_row="9"/>
                     </GridLayout>
-                    <Button
-                        android:id="@+id/btnSave"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/save"/>
-                </LinearLayout>
-            </FrameLayout>
-        </RelativeLayout>
-    </ScrollView>
+                </ScrollView>
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save"/>
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

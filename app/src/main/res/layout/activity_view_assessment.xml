@@ -113,7 +113,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
-                            android:inputType="text"
+                            android:inputType="textMultiLine"
+                            android:lines="5"
+                            android:maxLines="5"
+                            android:minLines="5"
+                            android:overScrollMode="always"
+                            android:scrollbarStyle="insideInset"
+                            android:scrollbars="vertical"
                             android:layout_column="1"
                             android:layout_row="4"/>
                     </GridLayout>

@@ -11,13 +11,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.Spinner;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import herold.wgucalendar.R;
@@ -88,7 +92,9 @@ public class ViewHelper {
                 calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { startDatePickerDialog.show(); }
+            public void onClick(View v) {
+                startDatePickerDialog.show();
+            }
         });
     }
 
@@ -96,8 +102,8 @@ public class ViewHelper {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
         builder.setTitle(title)
-            .setMessage(message)
-            .setIcon(android.R.drawable.ic_dialog_alert);
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_alert);
         return builder;
     }
 
@@ -106,4 +112,39 @@ public class ViewHelper {
                 context.getResources().getString(message));
     }
 
+    public static View.OnTouchListener scrollInsideScrollview(final ScrollView scrollView) {
+        return new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                scrollView.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+
+        };
+    }
+
+    public static void enableInput(List<View> inputs) {
+        for(View input : inputs) {
+            input.setFocusable(true);
+            input.setClickable(true);
+            input.setFocusableInTouchMode(true);
+            if (input instanceof EditText) {
+                ((EditText) input).setCursorVisible(true);
+            } else if (input instanceof Spinner) {
+                input.setEnabled(true);
+            }
+        }
+    }
+
+    public static void disableInput(List<View> inputs) {
+        for(View input : inputs) {
+            input.setFocusable(false);
+            input.setClickable(false);
+            if (input instanceof EditText) {
+                ((EditText) input).setCursorVisible(false);
+            } else if (input instanceof Spinner) {
+                input.setEnabled(false);
+            }
+        }
+    }
 }

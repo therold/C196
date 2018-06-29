@@ -73,7 +73,7 @@ public class ViewTermActivity extends AppCompatActivity {
         inputs.add(txtTermTitle);
         inputs.add(txtStartDate);
         inputs.add(txtEndDate);
-        for(View input : inputs) { input.setEnabled(false); }
+        ViewHelper.disableInput(inputs);
 
         termData = new TermData(this);
         termData.open();
@@ -162,9 +162,7 @@ public class ViewTermActivity extends AppCompatActivity {
         oTitle = txtTermTitle.getText().toString();
         oStart = txtStartDate.getText().toString();
         oEnd = txtEndDate.getText().toString();
-        for(View input : inputs) { input.setEnabled(true); }
-        for(View input : inputs) { input.setFocusable(true); }
-        for(View input : inputs) { input.setFocusableInTouchMode(true); }
+        ViewHelper.enableInput(inputs);
         txtStartDate.setFocusableInTouchMode(false);
         txtEndDate.setFocusableInTouchMode(false);
         txtStartDate.setFocusable(false);
@@ -205,9 +203,7 @@ public class ViewTermActivity extends AppCompatActivity {
     }
 
     private void cancelUpdate() {
-        for(View input : inputs) { input.setEnabled(false); }
-        for(View input : inputs) { input.setFocusable(false); }
-        for(View input : inputs) { input.setFocusableInTouchMode(false); }
+        ViewHelper.disableInput(inputs);
         lblCourses.setVisibility(View.VISIBLE);
         lvCourses.setVisibility(View.VISIBLE);
         imgMenu.setEnabled(true);

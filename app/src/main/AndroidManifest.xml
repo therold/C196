@@ -42,12 +42,15 @@
                 android:value=".view.ViewTermActivity" />
         </activity>
         <activity android:name=".view.ViewCourseActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
+                android:configChanges="orientation|screenSize|keyboardHidden"
                 android:value=".view.ViewTermActivity" />
         </activity>
         <activity android:name=".view.ViewAssessmentActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     private LinearLayout buttonBar;
     private List<View> inputs;
     private NavigationView navigationView;
+    private ScrollView scrollView;
     private Spinner cboType;
     private String oCourse;
     private String oTitle;
@@ -62,6 +64,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         txtNotes = findViewById(R.id.txtNotes);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
+        scrollView = findViewById(R.id.scrollView);
         imgMenu = findViewById(R.id.imgMenu);
         cntLayout = findViewById(R.id.cntLayout);
         toolbar = findViewById(R.id.toolbar);
@@ -73,7 +76,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         inputs.add(txtTitle);
         inputs.add(txtDueDate);
         inputs.add(txtNotes);
-        for(View input : inputs) { input.setEnabled(false); }
+        ViewHelper.disableInput(inputs);
 
         course = getIntent().getParcelableExtra("Course");
         courseData = new CourseData(this);
@@ -82,12 +85,12 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         assessmentData = new AssessmentData(this);
         assessmentData.open();
 
-
         cboType.setSelection(getIndex(cboType, assessment.getType()));
         txtCourse.setText(Long.toString(assessment.getCourseId()));
         txtTitle.setText(assessment.getTitle());
         txtDueDate.setText(assessment.getDueDate());
         txtNotes.setText(course.getNotes());
+        txtNotes.setOnTouchListener(ViewHelper.scrollInsideScrollview(scrollView));
 
         NavigationView.OnNavigationItemSelectedListener navListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -135,9 +138,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         oType = cboType.getSelectedItem().toString();
         oNotes = txtNotes.getText().toString();
 
-        for(View input : inputs) { input.setEnabled(true); }
-        for(View input : inputs) { input.setFocusable(true); }
-        for(View input : inputs) { input.setFocusableInTouchMode(true); }
+        ViewHelper.enableInput(inputs);
         txtDueDate.setFocusableInTouchMode(false);
         txtDueDate.setFocusable(false);
         imgMenu.setEnabled(false);
@@ -174,9 +175,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     }
 
     private void cancelUpdate() {
-        for(View input : inputs) { input.setEnabled(false); }
-        for(View input : inputs) { input.setFocusable(false); }
-        for(View input : inputs) { input.setFocusableInTouchMode(false); }
+        ViewHelper.disableInput(inputs);
         imgMenu.setEnabled(true);
         imgMenu.setVisibility(View.VISIBLE);
         txtDueDate.setOnClickListener(null);
