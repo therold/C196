@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE = "wgu.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     private static final String DATABASE_CREATE_TERM = "CREATE TABLE "
             + TermData.TABLE + "( "
@@ -24,8 +24,8 @@ public class DBHelper extends SQLiteOpenHelper {
             + CourseData.TABLE + "( "
             + CourseData.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + CourseData.COLUMN_TITLE + " TEXT NOT NULL, "
-            + CourseData.COLUMN_START_DATE + " TEXT NOT NULL, "
-            + CourseData.COLUMN_END_DATE + " TEXT NOT NULL, "
+            + CourseData.COLUMN_START_DATE + " INTEGER NOT NULL, "
+            + CourseData.COLUMN_END_DATE + " INTEGER NOT NULL, "
             + CourseData.COLUMN_STATUS + " TEXT NOT NULL, "
             + CourseData.COLUMN_MENTOR_NAME + " TEXT NOT NULL, "
             + CourseData.COLUMN_MENTOR_PHONE + " TEXT NOT NULL, "

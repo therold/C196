@@ -16,6 +16,7 @@ import java.util.List;
 
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.CourseData;
+import herold.wgucalendar.data.DBHelper;
 import herold.wgucalendar.data.TermData;
 import herold.wgucalendar.model.Term;
 
@@ -65,7 +66,6 @@ public class AddCourseActivity extends AppCompatActivity {
         courseData = new CourseData(this);
         courseData.open();
 
-
         term = getIntent().getParcelableExtra("Term");
         termData = new TermData(this);
         termData.open();
@@ -103,8 +103,8 @@ public class AddCourseActivity extends AppCompatActivity {
 
     private void save() {
         String title = txtTitle.getText().toString();
-        String startDate = txtStartDate.getText().toString();
-        String endDate = txtEndDate.getText().toString();
+        long startDate = DBHelper.stringToTimestamp(txtStartDate.getText().toString());
+        long endDate = DBHelper.stringToTimestamp(txtEndDate.getText().toString());
         String status = cboStatus.getSelectedItem().toString();
         String mentorName = txtMentorName.getText().toString();
         String mentorPhone = txtMentorPhone.getText().toString();

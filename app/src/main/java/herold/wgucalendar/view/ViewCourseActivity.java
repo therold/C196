@@ -27,6 +27,7 @@ import java.util.List;
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.AssessmentData;
 import herold.wgucalendar.data.CourseData;
+import herold.wgucalendar.data.DBHelper;
 import herold.wgucalendar.data.TermData;
 import herold.wgucalendar.model.Assessment;
 import herold.wgucalendar.model.Course;
@@ -239,8 +240,8 @@ public class ViewCourseActivity extends AppCompatActivity {
     private void saveUpdate() {
         course.setTermId(((Term) cboTerm.getSelectedItem()).getId());
         course.setTitle(txtTitle.getText().toString());
-        course.setStart(txtStartDate.getText().toString());
-        course.setEnd(txtEndDate.getText().toString());
+        course.setStart(DBHelper.stringToTimestamp(txtStartDate.getText().toString()));
+        course.setEnd(DBHelper.stringToTimestamp(txtEndDate.getText().toString()));
         course.setStatus(cboStatus.getSelectedItem().toString());
         course.setMentorName(txtMentorName.getText().toString());
         course.setMentorPhone(txtMentorPhone.getText().toString());
@@ -281,8 +282,8 @@ public class ViewCourseActivity extends AppCompatActivity {
         course = courseData.get(courseId);
         cboStatus.setSelection(getIndex(cboStatus, course.getStatus()));
         txtTitle.setText(course.getTitle());
-        txtStartDate.setText(course.getStart());
-        txtEndDate.setText(course.getEnd());
+        txtStartDate.setText(course.getStartDispaly());
+        txtEndDate.setText(course.getEndDisplay());
         txtMentorName.setText(course.getMentorName());
         txtMentorPhone.setText(course.getMentorPhone());
         txtMentorEmail.setText(course.getMentorEmail());

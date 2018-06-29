@@ -28,8 +28,8 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         TextView txtStart = convertView.findViewById(R.id.txtStart);
         TextView txtEnd =  convertView.findViewById(R.id.txtEnd);
         txtTitle.setText(course.getTitle());
-        txtStart.setText(course.getStart());
-        txtEnd.setText(course.getEnd());
+        txtStart.setText(course.getStartDispaly());
+        txtEnd.setText(course.getEndDisplay());
         return convertView;
     }
 }

@@ -36,7 +36,7 @@ public class CourseData {
 
     public void close() { dbHelper.close(); }
 
-    public Course createCourse(String title, String startDate, String endDate, String status,
+    public Course createCourse(String title, long startDate, long endDate, String status,
                                String mentorName, String mentorPhone, String mentorEmail,
                                String notes, long termId) {
         ContentValues values = new ContentValues();
@@ -119,8 +119,8 @@ public class CourseData {
         Course course = new Course();
         course.setId(cursor.getLong(0));
         course.setTitle(cursor.getString(1));
-        course.setStart(cursor.getString(2));
-        course.setEnd(cursor.getString(3));
+        course.setStart(cursor.getLong(2));
+        course.setEnd(cursor.getLong(3));
         course.setStatus(cursor.getString(4));
         course.setMentorName(cursor.getString(5));
         course.setMentorPhone(cursor.getString(6));
