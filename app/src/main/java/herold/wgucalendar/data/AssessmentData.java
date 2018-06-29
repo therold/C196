@@ -29,7 +29,7 @@ public class AssessmentData {
 
     public void close() { dbHelper.close(); }
 
-    public Assessment createAssessment(String title, String type, String dueDate, long courseId) {
+    public Assessment createAssessment(String title, String type, long dueDate, long courseId) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_TYPE, type);
@@ -92,7 +92,7 @@ public class AssessmentData {
         assessment.setId(cursor.getLong(0));
         assessment.setTitle(cursor.getString(1));
         assessment.setType(cursor.getString(2));
-        assessment.setDueDate(cursor.getString(3));
+        assessment.setDueDate(cursor.getLong(3));
         assessment.setCourseId(cursor.getLong(4));
         return assessment;
     }

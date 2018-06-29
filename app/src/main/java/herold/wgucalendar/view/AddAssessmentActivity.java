@@ -16,6 +16,7 @@ import java.util.List;
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.AssessmentData;
 import herold.wgucalendar.data.CourseData;
+import herold.wgucalendar.data.DBHelper;
 import herold.wgucalendar.model.Course;
 
 public class AddAssessmentActivity extends AppCompatActivity {
@@ -85,7 +86,7 @@ public class AddAssessmentActivity extends AppCompatActivity {
 
     private void save() {
         String title = txtTitle.getText().toString();
-        String dueDate = txtDueDate.getText().toString();
+        long dueDate = DBHelper.stringToTimestamp(txtDueDate.getText().toString());
         String type = cboType.getSelectedItem().toString();
         long courseId = ((Course) cboCourse.getSelectedItem()).getId();
         assessmentData.createAssessment(title, type, dueDate, courseId);

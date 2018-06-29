@@ -24,6 +24,7 @@ import java.util.List;
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.AssessmentData;
 import herold.wgucalendar.data.CourseData;
+import herold.wgucalendar.data.DBHelper;
 import herold.wgucalendar.model.Assessment;
 import herold.wgucalendar.model.Course;
 
@@ -91,7 +92,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
 
         cboType.setSelection(getIndex(cboType, assessment.getType()));
         txtTitle.setText(assessment.getTitle());
-        txtDueDate.setText(assessment.getDueDate());
+        txtDueDate.setText(assessment.getDueDateDisplay());
         txtNotes.setText(course.getNotes());
 
         txtNotes.setOnTouchListener(ViewHelper.scrollInsideScrollview(scrollView));
@@ -176,7 +177,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     private void saveUpdate() {
         assessment.setCourseId(((Course) cboCourse.getSelectedItem()).getId());
         assessment.setTitle(txtTitle.getText().toString());
-        assessment.setDueDate(txtDueDate.getText().toString());
+        assessment.setDueDate(DBHelper.stringToTimestamp(txtDueDate.getText().toString()));
         assessment.setType(cboType.getSelectedItem().toString());
         assessmentData.updateAssessment(assessment);
         course.setNotes(txtNotes.getText().toString());

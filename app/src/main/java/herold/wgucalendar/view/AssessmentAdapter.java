@@ -27,7 +27,7 @@ public class AssessmentAdapter extends ArrayAdapter<Assessment> {
         TextView txtDue = convertView.findViewById(R.id.txtDue);
         TextView txtType =  convertView.findViewById(R.id.txtType);
         txtTitle.setText(assessment.getTitle());
-        txtDue.setText(assessment.getDueDate());
+        txtDue.setText(assessment.getDueDateDisplay());
         txtType.setText(assessment.getType());
         return convertView;
     }
