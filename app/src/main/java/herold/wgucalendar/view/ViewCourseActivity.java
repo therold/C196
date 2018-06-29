@@ -52,13 +52,13 @@ public class ViewCourseActivity extends AppCompatActivity {
     private LinearLayout cntLayout;
     private LinearLayout buttonBar;
     private List<Assessment> assessments;
+    private List<Term> terms;
     private List<View> inputs;
     private ListView lvAssessments;
     private NavigationView navigationView;
     private ScrollView scrollView;
     private Spinner cboStatus;
     private Spinner cboTerm;
-    private String oTerm;
     private String oTitle;
     private String oStart;
     private String oEnd;
@@ -68,6 +68,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     private String oMentorEmail;
     private String oNotes;
     private Term term;
+    private Term oTerm;
     private TermData termData;
     private TermSpinnerAdapter adpTerm;
     private TextView lblAssessment;
@@ -161,7 +162,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     private void viewAssessment(Assessment assessment) {
         Intent intent = new Intent(context, ViewAssessmentActivity.class);
         intent.putExtra("Assessment", assessment);
-        intent.putExtra("Course", course);
+        intent.putExtra("CourseId", course.getId());
         startActivity(intent);
     }
 
@@ -192,7 +193,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     }
 
     private void editCourse() {
-        oTerm = cboTerm.getSelectedItem().toString();
+        oTerm = (Term) cboTerm.getSelectedItem();
         oTitle = txtTitle.getText().toString();
         oStart = txtStartDate.getText().toString();
         oEnd = txtEndDate.getText().toString();
@@ -257,7 +258,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         txtEndDate.setOnClickListener(null);
         cntLayout.removeView(buttonBar);
 
-        cboTerm.setSelection(getIndex(cboTerm, oTerm));
+        cboTerm.setSelection(terms.indexOf(oTerm));
         txtTitle.setText(oTitle);
         txtStartDate.setText(oStart);
         txtEndDate.setText(oEnd);

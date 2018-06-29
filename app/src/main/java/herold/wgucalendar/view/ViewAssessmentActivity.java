@@ -32,20 +32,23 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     private AssessmentData assessmentData;
     private Context context = this;
     private Course course;
+    private Course oCourse;
     private CourseData courseData;
+    private CourseSpinnerAdapter adpCourse;
     private DrawerLayout drawerLayout;
-    private EditText txtCourse;
     private EditText txtTitle;
     private EditText txtDueDate;
     private EditText txtNotes;
     private ImageView imgMenu;
     private LinearLayout cntLayout;
     private LinearLayout buttonBar;
+    private List<Course> courses;
     private List<View> inputs;
+    private long courseId;
     private NavigationView navigationView;
     private ScrollView scrollView;
+    private Spinner cboCourse;
     private Spinner cboType;
-    private String oCourse;
     private String oTitle;
     private String oDueDate;
     private String oType;
@@ -58,7 +61,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_assessment);
 
         cboType = findViewById(R.id.cboType);
-        txtCourse = findViewById(R.id.txtCourse);
+        cboCourse = findViewById(R.id.cboCourse);
         txtTitle = findViewById(R.id.txtTitle);
         txtDueDate = findViewById(R.id.txtDueDate);
         txtNotes = findViewById(R.id.txtNotes);
@@ -72,24 +75,29 @@ public class ViewAssessmentActivity extends AppCompatActivity {
 
         inputs = new ArrayList<>();
         inputs.add(cboType);
-        inputs.add(txtCourse);
+        inputs.add(cboCourse);
         inputs.add(txtTitle);
         inputs.add(txtDueDate);
         inputs.add(txtNotes);
         ViewHelper.disableInput(inputs);
 
-        course = getIntent().getParcelableExtra("Course");
         courseData = new CourseData(this);
         courseData.open();
+        courseId = getIntent().getLongExtra("CourseId", 0);
+        course = courseData.get(courseId);
+        List<Course> courses = courseData.all();
+        adpCourse = new CourseSpinnerAdapter(this, android.R.layout.simple_spinner_item, courses);
+        cboCourse.setAdapter(adpCourse);
+        cboCourse.setSelection(courses.indexOf(course));
         assessment = getIntent().getParcelableExtra("Assessment");
         assessmentData = new AssessmentData(this);
         assessmentData.open();
 
         cboType.setSelection(getIndex(cboType, assessment.getType()));
-        txtCourse.setText(Long.toString(assessment.getCourseId()));
         txtTitle.setText(assessment.getTitle());
         txtDueDate.setText(assessment.getDueDate());
         txtNotes.setText(course.getNotes());
+
         txtNotes.setOnTouchListener(ViewHelper.scrollInsideScrollview(scrollView));
 
         NavigationView.OnNavigationItemSelectedListener navListener = new NavigationView.OnNavigationItemSelectedListener() {
@@ -132,7 +140,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     }
 
     private void editAssessment() {
-        oCourse = txtCourse.getText().toString();
+        oCourse = (Course) cboCourse.getSelectedItem();
         oTitle = txtTitle.getText().toString();
         oDueDate = txtDueDate.getText().toString();
         oType = cboType.getSelectedItem().toString();
@@ -165,6 +173,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     }
 
     private void saveUpdate() {
+        assessment.setCourseId(((Course) cboCourse.getSelectedItem()).getId());
         assessment.setTitle(txtTitle.getText().toString());
         assessment.setDueDate(txtDueDate.getText().toString());
         assessment.setType(cboType.getSelectedItem().toString());
@@ -181,7 +190,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         txtDueDate.setOnClickListener(null);
         cntLayout.removeView(buttonBar);
 
-        txtCourse.setText(oCourse);
+        cboCourse.setSelection(courses.indexOf(oCourse));
         txtTitle.setText(oTitle);
         txtDueDate.setText(oDueDate);
         txtNotes.setText(oNotes);
