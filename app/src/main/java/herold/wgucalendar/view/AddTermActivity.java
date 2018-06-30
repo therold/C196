@@ -6,6 +6,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import herold.wgucalendar.data.TermData;
 import herold.wgucalendar.model.Term;
 
 public class AddTermActivity extends AppCompatActivity {
+    private Button btnSave;
     private Context context = this;
     private DrawerLayout drawerLayout;
     private EditText txtTitle;
@@ -50,8 +53,9 @@ public class AddTermActivity extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(ViewHelper.getNavigationListener(context, drawerLayout));
 
-        Button btnSave = new Button(this);
+        btnSave = new Button(this);
         btnSave.setText(R.string.save);
+        btnSave.setEnabled(false);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { save(); }
@@ -68,8 +72,36 @@ public class AddTermActivity extends AppCompatActivity {
         btnCancel.setLayoutParams(ViewHelper.leftLayout());
         toolbar.addView(btnCancel);
 
-        TextView txtTitle = ViewHelper.getTitleText(this, R.string.add_term);
-        toolbar.addView(txtTitle);
+        TextView txtActivityTitle = ViewHelper.getTitleText(this, R.string.add_term);
+        toolbar.addView(txtActivityTitle);
+
+        TextWatcher txtChanged = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) { canSave(); }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {}
+        };
+
+        txtTitle.addTextChangedListener(txtChanged);
+        txtStartDate.addTextChangedListener(txtChanged);
+        txtEndDate.addTextChangedListener(txtChanged);
+    }
+
+    private void canSave() {
+        boolean title = (!txtTitle.getText().toString().isEmpty());
+        boolean startDate = (!txtStartDate.getText().toString().isEmpty());
+        boolean endDate = (!txtEndDate.getText().toString().isEmpty());
+        if (title && startDate && endDate) {
+            btnSave.setEnabled(true);
+        } else {
+            btnSave.setEnabled(false);
+        }
     }
 
     private void save() {
