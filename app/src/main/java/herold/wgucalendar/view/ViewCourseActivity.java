@@ -1,8 +1,10 @@
 package herold.wgucalendar.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,11 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -34,6 +38,7 @@ import herold.wgucalendar.model.Course;
 import herold.wgucalendar.model.Term;
 
 public class ViewCourseActivity extends AppCompatActivity {
+    private Activity activity = this;
     private AssessmentAdapter adapter;
     private AssessmentData assessmentData;
     private Context context = this;
@@ -55,6 +60,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     private ListView lvAssessments;
     private NavigationView navigationView;
     private ScrollView scrollView;
+    private SharedPreferences sharedPref;
     private Spinner cboStatus;
     private Spinner cboTerm;
     private String oTitle;
@@ -65,6 +71,8 @@ public class ViewCourseActivity extends AppCompatActivity {
     private String oMentorPhone;
     private String oMentorEmail;
     private String oNotes;
+    private Switch swStart;
+    private Switch swEnd;
     private Term term;
     private Term oTerm;
     private TermData termData;
@@ -92,6 +100,8 @@ public class ViewCourseActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         imgMenu = findViewById(R.id.imgMenu);
         toolbar = findViewById(R.id.toolbar);
+        swStart = findViewById(R.id.swStart);
+        swEnd = findViewById(R.id.swEnd);
         scrollView = findViewById(R.id.scrollView);
         ViewHelper.setupToolbar(this, toolbar, R.string.view_course);
         txtNotes.setOnTouchListener(ViewHelper.scrollInsideScrollview(scrollView));
@@ -115,6 +125,23 @@ public class ViewCourseActivity extends AppCompatActivity {
         assessments = new ArrayList<>();
         adapter = new AssessmentAdapter(this, assessments);
         loadData();
+
+        sharedPref = getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+        swStart.setChecked(sharedPref.getBoolean(Integer.toString(course.getStartId()), false));
+        swEnd.setChecked(sharedPref.getBoolean(Integer.toString(course.getEndId()), false));
+        swStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ViewHelper.setAlarm(activity, course.getStart(), course.getStartMessage(), course.getStartId(), b);
+            }
+        });
+        swEnd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ViewHelper.setAlarm(activity, course.getEnd(), course.getEndMessage(), course.getEndId(), b);
+            }
+        });
+
         lvAssessments.setAdapter(adapter);
         AdapterView.OnItemClickListener lvListener = new AdapterView.OnItemClickListener() {
             @Override
@@ -179,6 +206,8 @@ public class ViewCourseActivity extends AppCompatActivity {
             final Course courseToDelete = course;
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    ViewHelper.setAlarm(activity, course.getStart(), course.getStartMessage(), course.getStartId(), false);
+                    ViewHelper.setAlarm(activity, course.getEnd(), course.getEndMessage(), course.getEndId(), false);
                     courseData.deleteCourse(courseToDelete);
                     finish();
                 }
@@ -247,6 +276,8 @@ public class ViewCourseActivity extends AppCompatActivity {
         course.setMentorPhone(txtMentorPhone.getText().toString());
         course.setMentorEmail(txtMentorEmail.getText().toString());
         course.setNotes(txtNotes.getText().toString());
+        ViewHelper.setAlarm(activity, course.getStart(), course.getStartMessage(), course.getStartId(), swStart.isChecked());
+        ViewHelper.setAlarm(activity, course.getEnd(), course.getEndMessage(), course.getEndId(), swEnd.isChecked());
         courseData.updateCourse(course);
         finish();
     }
