@@ -205,7 +205,7 @@ public class ViewTermActivity extends AppCompatActivity {
         term.setStart(DBHelper.stringToTimestamp(txtStartDate.getText().toString()));
         term.setEnd(DBHelper.stringToTimestamp(txtEndDate.getText().toString()));
         termData.updateTerm(term);
-        setResult(ViewHelper.DATA_SET_CHANGED);
+        ViewHelper.setAlarm(this, term.getStart(), "Start term " + term.getTitle() + " on " + term.getStartDisplay(), Integer.parseInt("1" + Long.toString(term.getId())), true);
         finish();
     }
 

@@ -18,10 +18,12 @@ public class TermData {
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_START_DATE = "start_date";
     public static final String COLUMN_END_DATE = "end_date";
+    public static final String COLUMN_START_ID = "start_id";
+    public static final String COLUMN_END_ID = "end_id";
     private SQLiteDatabase database;
     private DBHelper dbHelper;
     private String[] allColumns = { COLUMN_ID, COLUMN_TITLE,
-            COLUMN_START_DATE, COLUMN_END_DATE };
+            COLUMN_START_DATE, COLUMN_END_DATE, COLUMN_START_ID, COLUMN_END_ID };
 
     public TermData(Context context) { dbHelper = new DBHelper(context); }
 
@@ -29,11 +31,13 @@ public class TermData {
 
     public void close() { dbHelper.close(); }
 
-    public Term createTerm(String title, long startDate, long endDate) {
+    public Term createTerm(String title, long startDate, long endDate, int startId, int endId) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_START_DATE, startDate);
         values.put(COLUMN_END_DATE, endDate);
+        values.put(COLUMN_START_ID, startId);
+        values.put(COLUMN_END_ID, endId);
         long insertId = database.insert(TABLE, null, values);
         Cursor cursor = database.query(TABLE, allColumns,
                 COLUMN_ID + " = " + insertId, null,
@@ -100,6 +104,8 @@ public class TermData {
         term.setTitle(cursor.getString(1));
         term.setStart(cursor.getLong(2));
         term.setEnd(cursor.getLong(3));
+        term.setStartId(cursor.getInt(4));
+        term.setEndId(cursor.getInt(5));
         return term;
     }
 }

@@ -33,11 +33,4 @@
             android:id="@+id/nav_assessment_by_course"
             android:title="@string/view_assessment_by_course" />
     </group>
-    <group android:checkableBehavior="none"
-        android:id="@+id/grpNotifications">
-        <item
-            android:id="@+id/nav_notifications"
-            android:title="@string/view_notifications" />
-
-    </group>
 </menu>

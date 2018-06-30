@@ -11,14 +11,16 @@ import java.util.Locale;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE = "wgu.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 12;
 
     private static final String DATABASE_CREATE_TERM = "CREATE TABLE "
             + TermData.TABLE + "( "
             + TermData.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TermData.COLUMN_TITLE + " TEXT NOT NULL, "
             + TermData.COLUMN_START_DATE + " INTEGER NOT NULL, "
-            + TermData.COLUMN_END_DATE + " INTEGER NOT NULL);";
+            + TermData.COLUMN_END_DATE + " INTEGER NOT NULL, "
+            + TermData.COLUMN_START_ID + " INTEGER NOT NULL, "
+            + TermData.COLUMN_END_ID + " INTEGER NOT NULL);";
     private static final String DATABASE_CREATE_COURSE = "CREATE TABLE "
             + CourseData.TABLE + "( "
             + CourseData.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "

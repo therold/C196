@@ -46,7 +46,9 @@
     <string name="no_current_course">"No Current Course!"</string>
     <string name="current_term">Current Term</string>
     <string name="no_current_term">No Current Term!</string>
-
+    <string name="preference_file">alerts_term.db</string>
+    <string name="term_start_remind">Notify when term starts</string>
+    <string name="term_end_remind">Notify when term ends</string>
 
     <string-array name="status_array">
         <item>Plan to Take</item>

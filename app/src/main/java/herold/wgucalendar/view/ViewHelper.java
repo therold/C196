@@ -1,9 +1,12 @@
 package herold.wgucalendar.view;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -78,9 +81,6 @@ public class ViewHelper {
                 break;
             case R.id.nav_assessment_by_course:
                 ViewHelper.switchToActivity(context, ViewAssessmentByCourseActivity.class);
-                break;
-            case R.id.nav_notifications:
-                ViewHelper.switchToActivity(context, AddTermActivity.class);
                 break;
         }
     }
@@ -225,5 +225,32 @@ public class ViewHelper {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    public static void setAlarm(Activity activity, long date, String message, int key, boolean isEnabled) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if(sharedPref.contains(Integer.toString(key))) {
+            editor.remove(Integer.toString(key));
+        }
+        editor.putBoolean(Integer.toString(key), isEnabled);
+        editor.commit();
+
+        Intent intent = new Intent(activity, AlarmReceiver.class);
+        intent.putExtra("Title", message);
+        boolean pendingAlarm = (PendingIntent.getBroadcast(activity, key, intent, PendingIntent.FLAG_NO_CREATE) != null);
+
+        AlarmManager alarmMgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent sender;
+        if (pendingAlarm && isEnabled) {
+            sender = PendingIntent.getBroadcast(activity, key, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, date, sender);
+        } else if (pendingAlarm && !isEnabled) {
+            sender = PendingIntent.getBroadcast(activity, key, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmMgr.cancel(sender);
+        } else if (!pendingAlarm && isEnabled) {
+            sender = PendingIntent.getBroadcast(activity, key, intent, 0);
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, date, sender);
+        }
     }
 }

@@ -10,6 +10,8 @@ public class Term implements Parcelable {
     private String title;
     private long start;
     private long end;
+    private int startId;
+    private int endId;
 
     public long getId() { return id; }
     public String getTitle() { return title; }
@@ -17,19 +19,25 @@ public class Term implements Parcelable {
     public long getEnd() { return end; }
     public String getStartDisplay() { return DBHelper.timestampToString(start); }
     public String getEndDisplay() { return DBHelper.timestampToString(end); }
+    public int getStartId() { return startId; }
+    public int getEndId() { return endId; }
 
     public void setId(long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setStart(long start) { this.start = start; }
     public void setEnd(long end) { this.end = end; }
+    public void setStartId(int startId) { this.startId = startId; }
+    public void setEndId(int endId) { this.endId = endId; }
 
     public Term() {}
 
-    public Term(long id, String title, long start, long end) {
+    public Term(long id, String title, long start, long end, int startId, int endId) {
         this.id = id;
         this.title = title;
         this.start = start;
         this.end = end;
+        this.startId = startId;
+        this.endId = endId;
     }
 
     public Term(Parcel source) {
@@ -37,6 +45,8 @@ public class Term implements Parcelable {
         title = source.readString();
         start = source.readLong();
         end = source.readLong();
+        startId = source.readInt();
+        endId = source.readInt();
     }
 
     @Override
@@ -50,6 +60,8 @@ public class Term implements Parcelable {
         dest.writeString(title);
         dest.writeLong(start);
         dest.writeLong(end);
+        dest.writeInt(startId);
+        dest.writeInt(endId);
     }
 
     public static final Creator<Term> CREATOR = new Creator<Term>() {

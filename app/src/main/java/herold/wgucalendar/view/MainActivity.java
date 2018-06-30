@@ -148,5 +148,6 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         termData.close();
+        courseData.close();
     }
 }

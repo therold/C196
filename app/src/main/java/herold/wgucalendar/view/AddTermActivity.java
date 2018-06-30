@@ -9,11 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import herold.wgucalendar.R;
 import herold.wgucalendar.data.DBHelper;
 import herold.wgucalendar.data.TermData;
+import herold.wgucalendar.model.Term;
 
 public class AddTermActivity extends AppCompatActivity {
     private Context context = this;
@@ -22,6 +24,8 @@ public class AddTermActivity extends AppCompatActivity {
     private EditText txtStartDate;
     private EditText txtEndDate;
     private NavigationView navigationView;
+    private Switch swStart;
+    private Switch swEnd;
     private TermData termData;
     private Toolbar toolbar;
 
@@ -32,6 +36,8 @@ public class AddTermActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
+        swStart = findViewById(R.id.swStart);
+        swEnd = findViewById(R.id.swEnd);
         txtTitle = findViewById(R.id.txtTermTitle);
         txtStartDate =  findViewById(R.id.txtTermStartDate);
         txtEndDate =  findViewById(R.id.txtTermEndDate);
@@ -70,7 +76,13 @@ public class AddTermActivity extends AppCompatActivity {
         String title = txtTitle.getText().toString();
         long startDate = DBHelper.stringToTimestamp(txtStartDate.getText().toString());
         long endDate = DBHelper.stringToTimestamp(txtEndDate.getText().toString());
-        termData.createTerm(title, startDate, endDate);
+        int startId = 17 * (title.hashCode() + Long.hashCode(startDate));
+        int endId = 17 * (title.hashCode() + Long.hashCode(endDate));
+        boolean startEnabled = swStart.isChecked();
+        boolean endEnabled = swEnd.isChecked();
+        Term term = termData.createTerm(title, startDate, endDate, startId, endId);
+        ViewHelper.setAlarm(this, startDate, "Start term " + title + " on " + term.getStartDisplay(), startId, startEnabled);
+        ViewHelper.setAlarm(this, endDate, "End term " + title + " on " + term.getEndDisplay(), endId, endEnabled);
         finish();
     }
 
