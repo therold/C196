@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import herold.wgucalendar.R;
 import herold.wgucalendar.data.CourseData;
 import herold.wgucalendar.data.DBHelper;
 import herold.wgucalendar.data.TermData;
+import herold.wgucalendar.model.Course;
 import herold.wgucalendar.model.Term;
 
 public class AddCourseActivity extends AppCompatActivity {
@@ -36,6 +38,8 @@ public class AddCourseActivity extends AppCompatActivity {
     private ScrollView scrollView;
     private Spinner cboStatus;
     private Spinner cboTerm;
+    private Switch swStart;
+    private Switch swEnd;
     private Term term;
     private TermData termData;
     private TermSpinnerAdapter adpTerm;
@@ -60,6 +64,8 @@ public class AddCourseActivity extends AppCompatActivity {
         txtNotes = findViewById(R.id.txtNotes);
         btnSave = findViewById(R.id.btnSave);
         scrollView = findViewById(R.id.scrollView);
+        swStart = findViewById(R.id.swStart);
+        swEnd = findViewById(R.id.swEnd);
 
         ViewHelper.setupDateInput(this, txtStartDate);
         ViewHelper.setupDateInput(this, txtEndDate);
@@ -111,9 +117,14 @@ public class AddCourseActivity extends AppCompatActivity {
         String mentorEmail = txtMentorEmail.getText().toString();
         String notes = txtNotes.getText().toString();
         long termId = ((Term) cboTerm.getSelectedItem()).getId();
-        courseData.createCourse(title, startDate, endDate, status,
-                mentorName, mentorPhone, mentorEmail, notes, termId);
-        setResult(ViewHelper.DATA_SET_CHANGED);
+        int startId = 17 * (title.hashCode() + Long.hashCode(startDate));
+        int endId = 17 * (title.hashCode() + Long.hashCode(endDate));
+        boolean startEnabled = swStart.isChecked();
+        boolean endEnabled = swEnd.isChecked();
+        Course course = courseData.createCourse(title, startDate, endDate, status,
+                mentorName, mentorPhone, mentorEmail, notes, termId, startId, endId);
+        ViewHelper.setAlarm(this, startDate, course.getStartMessage(), startId, startEnabled);
+        ViewHelper.setAlarm(this, endDate, course.getEndMessage(), endId, endEnabled);
         finish();
     }
 

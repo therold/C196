@@ -282,7 +282,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         course = courseData.get(courseId);
         cboStatus.setSelection(getIndex(cboStatus, course.getStatus()));
         txtTitle.setText(course.getTitle());
-        txtStartDate.setText(course.getStartDispaly());
+        txtStartDate.setText(course.getStartDisplay());
         txtEndDate.setText(course.getEndDisplay());
         txtMentorName.setText(course.getMentorName());
         txtMentorPhone.setText(course.getMentorPhone());

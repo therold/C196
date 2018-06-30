@@ -49,6 +49,8 @@
     <string name="preference_file">alerts_term.db</string>
     <string name="term_start_remind">Notify when term starts</string>
     <string name="term_end_remind">Notify when term ends</string>
+    <string name="course_start_remind">Notify when course starts</string>
+    <string name="course_end_remind">Notify when course ends</string>
 
     <string-array name="status_array">
         <item>Plan to Take</item>

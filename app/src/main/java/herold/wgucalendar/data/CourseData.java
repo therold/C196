@@ -24,12 +24,15 @@ public class CourseData {
     public static final String COLUMN_MENTOR_EMAIL = "mentor_email";
     public static final String COLUMN_NOTES = "notes";
     public static final String COLUMN_TERM_ID = "term_id";
+    public static final String COLUMN_START_ID = "start_id";
+    public static final String COLUMN_END_ID = "end_id";
     private SQLiteDatabase database;
     private DBHelper dbHelper;
     private String[] allColumns = { COLUMN_ID, COLUMN_TITLE,
             COLUMN_START_DATE, COLUMN_END_DATE, COLUMN_STATUS,
             COLUMN_MENTOR_NAME, COLUMN_MENTOR_PHONE,
-            COLUMN_MENTOR_EMAIL, COLUMN_NOTES, COLUMN_TERM_ID };
+            COLUMN_MENTOR_EMAIL, COLUMN_NOTES, COLUMN_TERM_ID,
+            COLUMN_START_ID, COLUMN_END_ID };
 
     public CourseData(Context context) { dbHelper = new DBHelper(context); }
 
@@ -39,7 +42,7 @@ public class CourseData {
 
     public Course createCourse(String title, long startDate, long endDate, String status,
                                String mentorName, String mentorPhone, String mentorEmail,
-                               String notes, long termId) {
+                               String notes, long termId, int startId, int endId) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_START_DATE, startDate);
@@ -50,6 +53,8 @@ public class CourseData {
         values.put(COLUMN_MENTOR_EMAIL, mentorEmail);
         values.put(COLUMN_NOTES, notes);
         values.put(COLUMN_TERM_ID, termId);
+        values.put(COLUMN_START_ID, startId);
+        values.put(COLUMN_END_ID, endId);
         long insertId = database.insert(TABLE, null, values);
         Cursor cursor = database.query(TABLE, allColumns,
                 COLUMN_ID + " = " + insertId, null,
@@ -71,6 +76,8 @@ public class CourseData {
         values.put(COLUMN_MENTOR_EMAIL, course.getMentorEmail());
         values.put(COLUMN_NOTES, course.getNotes());
         values.put(COLUMN_TERM_ID, course.getTermId());
+        values.put(COLUMN_START_ID, course.getStartId());
+        values.put(COLUMN_END_ID, course.getEndId());
         database.update(TABLE, values, COLUMN_ID + " = " + course.getId(), null);
     }
 
@@ -144,6 +151,8 @@ public class CourseData {
         course.setMentorEmail(cursor.getString(7));
         course.setNotes(cursor.getString(8));
         course.setTermId(cursor.getLong(9));
+        course.setStartId(cursor.getInt(10));
+        course.setEndId(cursor.getInt(11));
         return course;
     }
 }

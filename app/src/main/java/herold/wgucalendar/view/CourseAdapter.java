@@ -28,7 +28,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         TextView txtStart = convertView.findViewById(R.id.txtStart);
         TextView txtEnd =  convertView.findViewById(R.id.txtEnd);
         txtTitle.setText(course.getTitle());
-        txtStart.setText(course.getStartDispaly());
+        txtStart.setText(course.getStartDisplay());
         txtEnd.setText(course.getEndDisplay());
         return convertView;
     }
