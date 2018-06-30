@@ -1,7 +1,9 @@
 package herold.wgucalendar.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,10 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ import herold.wgucalendar.model.Assessment;
 import herold.wgucalendar.model.Course;
 
 public class ViewAssessmentActivity extends AppCompatActivity {
+    private Activity activity = this;
     private Assessment assessment;
     private AssessmentData assessmentData;
     private Context context = this;
@@ -43,15 +48,16 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     private ImageView imgMenu;
     private List<Course> courses;
     private List<View> inputs;
-    private long courseId;
     private NavigationView navigationView;
     private ScrollView scrollView;
+    private SharedPreferences sharedPref;
     private Spinner cboCourse;
     private Spinner cboType;
     private String oTitle;
     private String oDueDate;
     private String oType;
     private String oNotes;
+    private Switch swDue;
     private Toolbar toolbar;
 
     @Override
@@ -68,6 +74,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         scrollView = findViewById(R.id.scrollView);
         imgMenu = findViewById(R.id.imgMenu);
+        swDue = findViewById(R.id.swDue);
         toolbar = findViewById(R.id.toolbar);
         ViewHelper.setupToolbar(this, toolbar, R.string.view_assessment);
 
@@ -94,6 +101,15 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         txtTitle.setText(assessment.getTitle());
         txtDueDate.setText(assessment.getDueDateDisplay());
         txtNotes.setText(course.getNotes());
+
+        sharedPref = getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+        swDue.setChecked(sharedPref.getBoolean(Integer.toString(assessment.getDueDateId()), false));
+        swDue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ViewHelper.setAlarm(activity, assessment.getDueDate(), assessment.getDueMessage(), assessment.getDueDateId(), b);
+            }
+        });
 
         txtNotes.setOnTouchListener(ViewHelper.scrollInsideScrollview(scrollView));
 
@@ -126,6 +142,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         final Assessment assessmentToDelete = assessment;
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                ViewHelper.setAlarm(activity, assessment.getDueDate(), assessment.getDueMessage(), assessment.getDueDateId(), false);
                 assessmentData.deleteAssessment(assessmentToDelete);
                 finish();
             }
@@ -180,6 +197,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         assessment.setDueDate(DBHelper.stringToTimestamp(txtDueDate.getText().toString()));
         assessment.setType(cboType.getSelectedItem().toString());
         assessmentData.updateAssessment(assessment);
+        ViewHelper.setAlarm(activity, assessment.getDueDate(), assessment.getDueMessage(), assessment.getDueDateId(), swDue.isChecked());
         course.setNotes(txtNotes.getText().toString());
         courseData.updateCourse(course);
         finish();
