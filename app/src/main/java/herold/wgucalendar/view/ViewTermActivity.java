@@ -12,6 +12,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,6 +38,7 @@ import herold.wgucalendar.model.Term;
 
 public class ViewTermActivity extends AppCompatActivity {
     private final Activity activity = this;
+    private Button btnSave;
     private Context context = this;
     private CourseAdapter adapter;
     private CourseData courseData;
@@ -146,6 +149,33 @@ public class ViewTermActivity extends AppCompatActivity {
         };
         imgMenu.setOnClickListener(imgMenuListener);
         ViewHelper.scrollToTop(scrollView);
+        TextWatcher txtChanged = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) { canSave(); }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {}
+        };
+
+        txtTermTitle.addTextChangedListener(txtChanged);
+        txtStartDate.addTextChangedListener(txtChanged);
+        txtEndDate.addTextChangedListener(txtChanged);
+    }
+
+    private void canSave() {
+        boolean title = (!txtTermTitle.getText().toString().isEmpty());
+        boolean startDate = (!txtStartDate.getText().toString().isEmpty());
+        boolean endDate = (!txtEndDate.getText().toString().isEmpty());
+        if (title && startDate && endDate) {
+            btnSave.setEnabled(true);
+        } else {
+            btnSave.setEnabled(false);
+        }
     }
 
     private void addCourse() {
@@ -206,7 +236,7 @@ public class ViewTermActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toolbar.removeAllViews();
-        Button btnSave = new Button(context);
+        btnSave = new Button(context);
         btnSave.setText(R.string.save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
