@@ -18,10 +18,12 @@ public class AssessmentData {
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_DUE_DATE = "due_date";
     public static final String COLUMN_COURSE_ID = "course_id";
+    public static final String COLUMN_DUE_DATE_ID = "due_date_id";
     private SQLiteDatabase database;
     private DBHelper dbHelper;
     private String[] allColumns = { COLUMN_ID, COLUMN_TITLE,
-            COLUMN_TYPE, COLUMN_DUE_DATE, COLUMN_COURSE_ID };
+            COLUMN_TYPE, COLUMN_DUE_DATE, COLUMN_COURSE_ID,
+            COLUMN_DUE_DATE_ID };
 
     public AssessmentData(Context context) { dbHelper = new DBHelper(context); }
 
@@ -29,12 +31,13 @@ public class AssessmentData {
 
     public void close() { dbHelper.close(); }
 
-    public Assessment createAssessment(String title, String type, long dueDate, long courseId) {
+    public Assessment createAssessment(String title, String type, long dueDate, long courseId, int dueDateId) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_TYPE, type);
         values.put(COLUMN_DUE_DATE, dueDate);
         values.put(COLUMN_COURSE_ID, courseId);
+        values.put(COLUMN_DUE_DATE_ID, dueDateId);
         long insertId = database.insert(TABLE, null, values);
         Cursor cursor = database.query(TABLE, allColumns,
                 COLUMN_ID + " = " + insertId, null,
@@ -51,6 +54,7 @@ public class AssessmentData {
         values.put(COLUMN_TYPE, assessment.getType());
         values.put(COLUMN_DUE_DATE, assessment.getDueDate());
         values.put(COLUMN_COURSE_ID, assessment.getCourseId());
+        values.put(COLUMN_DUE_DATE_ID, assessment.getCourseId());
         database.update(TABLE, values, COLUMN_ID + " = " + assessment.getId(), null);
     }
 
@@ -94,6 +98,7 @@ public class AssessmentData {
         assessment.setType(cursor.getString(2));
         assessment.setDueDate(cursor.getLong(3));
         assessment.setCourseId(cursor.getLong(4));
+        assessment.setDueDateId(cursor.getInt(5));
         return assessment;
     }
 }

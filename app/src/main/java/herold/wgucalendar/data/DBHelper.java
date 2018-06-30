@@ -11,7 +11,7 @@ import java.util.Locale;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE = "wgu.db";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
     private static final String DATABASE_CREATE_TERM = "CREATE TABLE "
             + TermData.TABLE + "( "
@@ -44,6 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
             + AssessmentData.COLUMN_TYPE + " TEXT NOT NULL, "
             + AssessmentData.COLUMN_DUE_DATE + " INTEGER NOT NULL, "
             + AssessmentData.COLUMN_COURSE_ID + " INTEGER NOT NULL, "
+            + AssessmentData.COLUMN_DUE_DATE_ID + " INTEGER NOT NULL, "
             + " FOREIGN KEY (" + AssessmentData.COLUMN_COURSE_ID + ")  REFERENCES "
             + CourseData.TABLE + " (" + CourseData.COLUMN_ID + "));";
 

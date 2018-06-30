@@ -11,6 +11,7 @@ public class Assessment implements Parcelable {
     private String type;
     private long dueDate;
     private long courseId;
+    private int dueDateId;
 
     public long getId() { return id; }
     public String getTitle() { return title; }
@@ -18,21 +19,25 @@ public class Assessment implements Parcelable {
     public long getDueDate() { return dueDate; }
     public String getDueDateDisplay() { return DBHelper.timestampToString(dueDate); }
     public long getCourseId() { return courseId; }
+    public int getDueDateId() { return dueDateId; }
+    public String getDueMessage() { return "Assessment " + title + " due on " + getDueDateDisplay(); }
 
     public void setId(long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setType(String type) { this.type = type; }
     public void setDueDate(long dueDate) { this.dueDate = dueDate; }
     public void setCourseId(long courseId) { this.courseId = courseId; }
+    public void setDueDateId(int dueDateId) { this.dueDateId = dueDateId; }
 
     public Assessment() {}
 
-    public Assessment(long id, String title, String type, long dueDate, long courseId) {
+    public Assessment(long id, String title, String type, long dueDate, long courseId, int dueDateId) {
         this.id = id;
         this.title = title;
         this.type = type;
         this.dueDate = dueDate;
         this.courseId = courseId;
+        this.dueDateId = dueDateId;
     }
 
     public Assessment(Parcel source) {
@@ -41,6 +46,7 @@ public class Assessment implements Parcelable {
         type = source.readString();
         dueDate = source.readLong();
         courseId = source.readLong();
+        dueDateId = source.readInt();
     }
 
     @Override
@@ -53,6 +59,7 @@ public class Assessment implements Parcelable {
         dest.writeString(type);
         dest.writeLong(dueDate);
         dest.writeLong(courseId);
+        dest.writeInt(dueDateId);
     }
 
     public static final Creator<Assessment> CREATOR = new Creator<Assessment>() {

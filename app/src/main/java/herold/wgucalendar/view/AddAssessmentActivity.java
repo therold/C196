@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import herold.wgucalendar.R;
 import herold.wgucalendar.data.AssessmentData;
 import herold.wgucalendar.data.CourseData;
 import herold.wgucalendar.data.DBHelper;
+import herold.wgucalendar.model.Assessment;
 import herold.wgucalendar.model.Course;
 
 public class AddAssessmentActivity extends AppCompatActivity {
@@ -31,6 +33,7 @@ public class AddAssessmentActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Spinner cboCourse;
     private Spinner cboType;
+    private Switch swDue;
     private Toolbar toolbar;
 
     @Override
@@ -44,6 +47,7 @@ public class AddAssessmentActivity extends AppCompatActivity {
         cboCourse = findViewById(R.id.cboCourse);
         txtTitle = findViewById(R.id.txtTitle);
         txtDueDate = findViewById(R.id.txtDueDate);
+        swDue = findViewById(R.id.swDue);
         cboType = findViewById(R.id.cboType);
 
         ViewHelper.setupDateInput(this, txtDueDate);
@@ -89,7 +93,11 @@ public class AddAssessmentActivity extends AppCompatActivity {
         long dueDate = DBHelper.stringToTimestamp(txtDueDate.getText().toString());
         String type = cboType.getSelectedItem().toString();
         long courseId = ((Course) cboCourse.getSelectedItem()).getId();
-        assessmentData.createAssessment(title, type, dueDate, courseId);
+        int dueDateId = 17 * (title.hashCode() + Long.hashCode(dueDate));
+        boolean dueEnabled = swDue.isChecked();
+
+        Assessment assessment = assessmentData.createAssessment(title, type, dueDate, courseId, dueDateId);
+        ViewHelper.setAlarm(this, dueDate, assessment.getDueMessage(), dueDateId, dueEnabled);
         finish();
     }
 
