@@ -21,6 +21,8 @@ public class Term implements Parcelable {
     public String getEndDisplay() { return DBHelper.timestampToString(end); }
     public int getStartId() { return startId; }
     public int getEndId() { return endId; }
+    public String getStartMessage() { return "Start term " + title + " on " + getStartDisplay(); }
+    public String getEndMessage() { return "End term " + title + " on " + getStartDisplay(); }
 
     public void setId(long id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }

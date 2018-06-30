@@ -230,9 +230,6 @@ public class ViewHelper {
     public static void setAlarm(Activity activity, long date, String message, int key, boolean isEnabled) {
         SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        if(sharedPref.contains(Integer.toString(key))) {
-            editor.remove(Integer.toString(key));
-        }
         editor.putBoolean(Integer.toString(key), isEnabled);
         editor.commit();
 

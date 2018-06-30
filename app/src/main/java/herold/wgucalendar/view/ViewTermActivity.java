@@ -1,8 +1,10 @@
 package herold.wgucalendar.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,10 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,6 +35,7 @@ import herold.wgucalendar.model.Course;
 import herold.wgucalendar.model.Term;
 
 public class ViewTermActivity extends AppCompatActivity {
+    private final Activity activity = this;
     private Context context = this;
     private CourseAdapter adapter;
     private CourseData courseData;
@@ -44,9 +49,12 @@ public class ViewTermActivity extends AppCompatActivity {
     private ListView lvCourses;
     private NavigationView navigationView;
     private ScrollView scrollView;
+    private SharedPreferences sharedPref;
     private String oTitle;
     private String oStart;
     private String oEnd;
+    private Switch swStart;
+    private Switch swEnd;
     private Term term;
     private TermData termData;
     private TextView lblCourses;
@@ -65,6 +73,8 @@ public class ViewTermActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         lblCourses = findViewById(R.id.lblCourses);
+        swStart = findViewById(R.id.swStart);
+        swEnd = findViewById(R.id.swEnd);
         toolbar = findViewById(R.id.toolbar);
         scrollView = findViewById(R.id.scrollView);
         ViewHelper.setupToolbar(this, toolbar, R.string.view_term);
@@ -81,6 +91,22 @@ public class ViewTermActivity extends AppCompatActivity {
         txtTermTitle.setText(term.getTitle());
         txtStartDate.setText(term.getStartDisplay());
         txtEndDate.setText(term.getEndDisplay());
+
+        sharedPref = getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+        swStart.setChecked(sharedPref.getBoolean(Integer.toString(term.getStartId()), false));
+        swEnd.setChecked(sharedPref.getBoolean(Integer.toString(term.getEndId()), false));
+        swStart.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ViewHelper.setAlarm(activity, term.getStart(), term.getStartMessage(), term.getStartId(), b);
+            }
+        });
+        swEnd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ViewHelper.setAlarm(activity, term.getEnd(), term.getEndMessage(), term.getEndId(), b);
+            }
+        });
 
         courseData = new CourseData(this);
         courseData.open();
@@ -149,6 +175,8 @@ public class ViewTermActivity extends AppCompatActivity {
             final Term termToDelete = term;
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    ViewHelper.setAlarm(activity, term.getStart(), term.getStartMessage(), term.getStartId(), false);
+                    ViewHelper.setAlarm(activity, term.getEnd(), term.getEndMessage(), term.getEndId(), false);
                     termData.deleteTerm(termToDelete);
                     finish();
                 }
@@ -205,7 +233,8 @@ public class ViewTermActivity extends AppCompatActivity {
         term.setStart(DBHelper.stringToTimestamp(txtStartDate.getText().toString()));
         term.setEnd(DBHelper.stringToTimestamp(txtEndDate.getText().toString()));
         termData.updateTerm(term);
-        ViewHelper.setAlarm(this, term.getStart(), "Start term " + term.getTitle() + " on " + term.getStartDisplay(), Integer.parseInt("1" + Long.toString(term.getId())), true);
+        ViewHelper.setAlarm(activity, term.getStart(), term.getStartMessage(), term.getStartId(), swStart.isChecked());
+        ViewHelper.setAlarm(activity, term.getEnd(), term.getEndMessage(), term.getEndId(), swEnd.isChecked());
         finish();
     }
 

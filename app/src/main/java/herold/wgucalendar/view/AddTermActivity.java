@@ -81,8 +81,8 @@ public class AddTermActivity extends AppCompatActivity {
         boolean startEnabled = swStart.isChecked();
         boolean endEnabled = swEnd.isChecked();
         Term term = termData.createTerm(title, startDate, endDate, startId, endId);
-        ViewHelper.setAlarm(this, startDate, "Start term " + title + " on " + term.getStartDisplay(), startId, startEnabled);
-        ViewHelper.setAlarm(this, endDate, "End term " + title + " on " + term.getEndDisplay(), endId, endEnabled);
+        ViewHelper.setAlarm(this, startDate, term.getStartMessage(), startId, startEnabled);
+        ViewHelper.setAlarm(this, endDate, term.getEndMessage(), endId, endEnabled);
         finish();
     }
 
