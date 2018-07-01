@@ -12,6 +12,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +43,7 @@ public class ViewCourseActivity extends AppCompatActivity {
     private Activity activity = this;
     private AssessmentAdapter adapter;
     private AssessmentData assessmentData;
+    private Button btnSave;
     private Context context = this;
     private Course course;
     private CourseData courseData;
@@ -124,6 +127,7 @@ public class ViewCourseActivity extends AppCompatActivity {
         courseId = getIntent().getLongExtra("CourseId", 0);
         assessments = new ArrayList<>();
         adapter = new AssessmentAdapter(this, assessments);
+        btnSave = new Button(context);
         loadData();
 
         sharedPref = getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
@@ -176,6 +180,40 @@ public class ViewCourseActivity extends AppCompatActivity {
         };
         imgMenu.setOnClickListener(menuClickListener);
         ViewHelper.scrollToTop(scrollView);
+
+        TextWatcher txtChanged = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) { canSave(); }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {}
+        };
+
+        txtTitle.addTextChangedListener(txtChanged);
+        txtStartDate.addTextChangedListener(txtChanged);
+        txtEndDate.addTextChangedListener(txtChanged);
+        txtMentorName.addTextChangedListener(txtChanged);
+        txtMentorPhone.addTextChangedListener(txtChanged);
+        txtMentorEmail.addTextChangedListener(txtChanged);
+    }
+
+    private void canSave() {
+        boolean title = (!txtTitle.getText().toString().isEmpty());
+        boolean startDate = (!txtStartDate.getText().toString().isEmpty());
+        boolean endDate = (!txtEndDate.getText().toString().isEmpty());
+        boolean mentorName = (!txtMentorName.getText().toString().isEmpty());
+        boolean mentorPhone = (!txtMentorPhone.getText().toString().isEmpty());
+        boolean mentorEmail = (!txtMentorEmail.getText().toString().isEmpty());
+        if (title && startDate && endDate && mentorName && mentorPhone && mentorEmail) {
+            btnSave.setEnabled(true);
+        } else {
+            btnSave.setEnabled(false);
+        }
     }
 
 
@@ -244,7 +282,7 @@ public class ViewCourseActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toolbar.removeAllViews();
-        Button btnSave = new Button(context);
+        btnSave = new Button(context);
         btnSave.setText(R.string.save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
