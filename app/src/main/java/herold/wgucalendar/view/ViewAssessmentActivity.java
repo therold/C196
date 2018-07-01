@@ -3,6 +3,7 @@ package herold.wgucalendar.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -127,6 +128,9 @@ public class ViewAssessmentActivity extends AppCompatActivity {
                     case R.id.nav_delete_assessment:
                         deleteAssessment();
                         break;
+                    case R.id.nav_share_notes:
+                        shareNotes();
+                        break;
                 }
                 return true;
             }
@@ -248,6 +252,14 @@ public class ViewAssessmentActivity extends AppCompatActivity {
         txtNotes.setText(oNotes);
         cboType.setSelection(getIndex(cboType, oType));
         ViewHelper.closeKeyboard(this);
+    }
+
+    private void shareNotes() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, course.getTitle() + " Notes:" + "\n" + course.getNotes());
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Send " + course.getTitle() + " Notes To"));
     }
 
     private int getIndex(Spinner spinner, String myString){

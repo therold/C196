@@ -52,6 +52,7 @@
     <string name="course_start_remind">Notify when course starts</string>
     <string name="course_end_remind">Notify when course ends</string>
     <string name="assessment_due_remind">Notify when assessment due</string>
+    <string name="share_notes">Share Notes</string>
 
     <string-array name="status_array">
         <item>Plan to Take</item>

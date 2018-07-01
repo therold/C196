@@ -8,4 +8,10 @@
             android:id="@+id/nav_delete_assessment"
             android:title="@string/delete_assessment" />
     </group>
+    <group android:checkableBehavior="none"
+        android:id="@+id/grpNotes">
+        <item
+            android:id="@+id/nav_share_notes"
+            android:title="@string/share_notes"/>
+    </group>
 </menu>

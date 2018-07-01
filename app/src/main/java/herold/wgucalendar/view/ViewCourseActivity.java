@@ -169,6 +169,9 @@ public class ViewCourseActivity extends AppCompatActivity {
                     case R.id.nav_delete_course:
                         deleteCourse();
                         break;
+                    case R.id.nav_share_notes:
+                        shareNotes();
+                        break;
                 }
                 return true;
             }
@@ -371,6 +374,14 @@ public class ViewCourseActivity extends AppCompatActivity {
         adapter.addAll(assessments);
 
         adapter.notifyDataSetChanged();
+    }
+
+    private void shareNotes() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, course.getTitle() + " Notes:" + "\n" + course.getNotes());
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Send " + course.getTitle() + " Notes To"));
     }
 
     @Override
