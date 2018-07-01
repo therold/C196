@@ -11,6 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +38,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
     private Activity activity = this;
     private Assessment assessment;
     private AssessmentData assessmentData;
+    private Button btnSave;
     private Context context = this;
     private Course course;
     private Course oCourse;
@@ -134,6 +137,32 @@ public class ViewAssessmentActivity extends AppCompatActivity {
             public void onClick(View v) { drawerLayout.openDrawer(GravityCompat.END); }
         };
         imgMenu.setOnClickListener(menuClickListener);
+
+        TextWatcher txtChanged = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) { canSave(); }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {}
+        };
+
+        txtTitle.addTextChangedListener(txtChanged);
+        txtDueDate.addTextChangedListener(txtChanged);
+    }
+
+    private void canSave() {
+        boolean title = (!txtTitle.getText().toString().isEmpty());
+        boolean dueDate = (!txtDueDate.getText().toString().isEmpty());
+        if (title && dueDate) {
+            btnSave.setEnabled(true);
+        } else {
+            btnSave.setEnabled(false);
+        }
     }
 
     private void deleteAssessment() {
@@ -169,7 +198,7 @@ public class ViewAssessmentActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toolbar.removeAllViews();
-        Button btnSave = new Button(context);
+        btnSave = new Button(context);
         btnSave.setText(R.string.save);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
